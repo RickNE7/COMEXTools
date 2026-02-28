@@ -31,34 +31,37 @@
                         }
                     },
                     boxShadow: {
-                        'nav': '0 -4px 20px rgba(0,0,0,0.08)',
-                        'card': '0 4px 15px rgba(0, 0, 0, 0.04)',
-                        'card-hover': '0 12px 25px rgba(0, 51, 153, 0.12)'
+                        'nav': '0 -4px 20px rgba(0,0,0,0.06)',
+                        'card': '0 4px 15px rgba(0, 0, 0, 0.03)',
+                        'card-hover': '0 12px 25px rgba(0, 51, 153, 0.1)'
                     }
                 }
             }
         }
     </script>
     
-    <!-- Phosphor Icons -->
+    <!-- Phosphor Icons (Librería moderna de iconos) -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
         body { 
-            background-color: #f0f4f8; 
+            background-color: #f4f7fb; 
             -webkit-tap-highlight-color: transparent;
         }
         
+        /* Ocultar barra de desplazamiento para las categorías en móvil */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
+        /* Animaciones para las tarjetas */
         .tool-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .tool-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
         }
         
+        /* Animación "Pop" de la estrella de favoritos */
         .star-btn {
             transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -74,25 +77,27 @@
             animation: starPop 0.4s ease-out;
         }
 
+        /* Fade-in secuencial de las tarjetas */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .animate-fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
+            animation: fadeIn 0.4s ease-out forwards;
         }
         
-        /* Safe area for mobile bottom nav */
-        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+        /* Ajuste para la barra inferior en iOS/dispositivos con safe-area */
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 16px); }
+        .pt-safe { padding-top: env(safe-area-inset-top, 0px); }
     </style>
 </head>
 <body class="text-slate-800 antialiased h-screen flex overflow-hidden">
 
-    <!-- SIDEBAR DESKTOP -->
+    <!-- SIDEBAR DESKTOP (Se oculta en móviles) -->
     <aside class="w-72 bg-adex-darkBlue text-white flex-col shadow-2xl z-20 hidden lg:flex flex-shrink-0 relative">
         <!-- Logo -->
-        <div class="p-6 border-b border-white/10 flex items-center gap-4">
-            <div class="bg-white p-2 rounded-xl shadow-md">
+        <div class="p-6 border-b border-white/10 flex items-center gap-4 pt-safe">
+            <div class="bg-white p-2.5 rounded-xl shadow-md">
                 <img src="https://www.adex.edu.pe/wp-content/uploads/2020/01/favicon.png" alt="ADEX Escuela" class="w-8 h-8 object-contain">
             </div>
             <div>
@@ -103,128 +108,122 @@
 
         <!-- Navegación Desktop -->
         <div class="p-5 flex-grow overflow-y-auto hide-scrollbar">
-            <p class="text-[10px] font-bold text-blue-300/60 uppercase tracking-widest mb-3 px-2">Vistas</p>
+            <p class="text-[10px] font-bold text-blue-300/60 uppercase tracking-widest mb-3 px-2">Panel de Control</p>
             <nav class="space-y-2 mb-8">
-                <button onclick="changeView('all')" id="dt-btn-all" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-adex-blue text-white font-semibold transition-all shadow-md">
+                <button onclick="changeView('all')" id="dt-btn-all" class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl bg-adex-blue text-white font-bold transition-all shadow-md">
                     <i class="ph-bold ph-squares-four text-xl"></i> Directorio Global
                 </button>
-                <button onclick="changeView('favorites')" id="dt-btn-fav" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-blue-200 hover:bg-white/5 font-medium transition-all group border border-transparent">
+                <button onclick="changeView('favorites')" id="dt-btn-fav" class="w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-blue-200 hover:bg-white/5 font-medium transition-all group border border-transparent">
                     <div class="flex items-center gap-3">
-                        <i class="ph-fill ph-star text-xl group-hover:text-yellow-400 transition-colors"></i> Favoritos
+                        <i class="ph-fill ph-star text-xl group-hover:text-yellow-400 transition-colors"></i> Mis Favoritos
                     </div>
                     <span id="dt-fav-counter" class="bg-white/10 text-xs py-1 px-2.5 rounded-full font-bold">0</span>
                 </button>
             </nav>
 
-            <p class="text-[10px] font-bold text-blue-300/60 uppercase tracking-widest mb-3 px-2">Filtros Estratégicos</p>
+            <p class="text-[10px] font-bold text-blue-300/60 uppercase tracking-widest mb-3 px-2">Categorías Estratégicas</p>
             <nav id="dt-category-nav" class="space-y-1.5">
-                <!-- Inyectado vía JS -->
+                <!-- Se inyecta vía JS -->
             </nav>
         </div>
 
         <!-- Créditos Desktop -->
-        <div class="p-5 bg-gradient-to-t from-black/40 to-transparent mt-auto">
-            <div class="bg-white/5 rounded-xl p-4 border border-white/10 backdrop-blur-sm">
-                <div class="flex items-center gap-3 mb-2">
+        <div class="p-5 bg-gradient-to-t from-black/40 to-transparent mt-auto pb-safe">
+            <div class="bg-white/5 rounded-2xl p-4 border border-white/10 backdrop-blur-sm">
+                <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-adex-red to-orange-500 flex items-center justify-center text-white font-black shadow-lg">
                         EM
                     </div>
                     <div>
-                        <p class="text-[9px] text-blue-200 uppercase tracking-wider font-bold">Investigador</p>
-                        <p class="text-sm font-bold text-white">Eric Mozombite</p>
+                        <p class="text-[9px] text-blue-200 uppercase tracking-widest font-bold">Desarrollado por</p>
+                        <p class="text-sm font-bold text-white leading-tight mt-0.5">Eric Mozombite</p>
                     </div>
-                </div>
-                <div class="pt-2 mt-2 border-t border-white/10">
-                    <p class="text-[10px] text-blue-100/70 italic flex items-center gap-1.5">
-                        <i class="ph-fill ph-heart text-adex-red"></i> Inspirado en Benjamín A.
-                    </p>
                 </div>
             </div>
         </div>
     </aside>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-1 flex flex-col h-full relative overflow-hidden bg-[#f0f4f8]">
+    <main class="flex-1 flex flex-col h-full relative overflow-hidden bg-adex-gray/50">
         
-        <!-- HEADER MOBILE & DESKTOP (Search) -->
-        <header class="bg-white px-4 lg:px-8 py-4 flex flex-col lg:flex-row lg:items-center justify-between z-10 shadow-sm gap-4">
+        <!-- HEADER MOBILE & DESKTOP (Buscador) -->
+        <header class="bg-white px-4 lg:px-8 py-4 lg:py-6 flex flex-col lg:flex-row lg:items-center justify-between z-10 shadow-sm gap-4 pt-safe">
             
-            <!-- Mobile Header (Logo + Credits) -->
+            <!-- Mobile Header (Logo + Créditos minimizados) -->
             <div class="flex items-center justify-between lg:hidden">
                 <div class="flex items-center gap-3">
-                    <img src="https://www.adex.edu.pe/wp-content/uploads/2020/01/favicon.png" alt="ADEX" class="w-8 h-8 drop-shadow-sm">
+                    <div class="bg-adex-darkBlue p-1.5 rounded-lg shadow-sm">
+                        <img src="https://www.adex.edu.pe/wp-content/uploads/2020/01/favicon.png" alt="ADEX" class="w-6 h-6 object-contain bg-white rounded">
+                    </div>
                     <div>
                         <span class="font-black text-adex-darkBlue text-xl leading-none block">ADEX</span>
-                        <span class="font-black text-adex-red text-[10px] tracking-[0.2em] uppercase block">Escuela</span>
+                        <span class="font-black text-adex-red text-[9px] tracking-[0.2em] uppercase block">Escuela</span>
                     </div>
                 </div>
-                <!-- Mini Credit Mobile -->
-                <div class="text-right flex flex-col items-end" onclick="alert('Desarrollado por: Eric Mozombite\nInspirado en: Benjamín Alejandro')">
-                    <span class="bg-adex-red text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wide">Autor</span>
-                    <span class="text-xs font-bold text-slate-700 mt-0.5">Eric M.</span>
+                <!-- Badge Autor Mobile -->
+                <div class="bg-slate-100 rounded-full px-3 py-1.5 flex items-center gap-2 border border-slate-200">
+                    <span class="w-5 h-5 rounded-full bg-adex-red text-white text-[9px] font-bold flex items-center justify-center">EM</span>
+                    <span class="text-[10px] font-bold text-slate-700">Eric M.</span>
                 </div>
             </div>
 
-            <!-- Search Bar -->
+            <!-- Barra de Búsqueda -->
             <div class="relative w-full lg:max-w-2xl flex-1 group">
                 <i class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-adex-blue transition-colors"></i>
                 <input type="text" id="search-input" placeholder="Buscar herramienta, uso o palabra clave (ej. TLC, Arancel)..." 
-                    class="w-full bg-slate-100/70 border border-slate-200 rounded-2xl pl-11 pr-4 py-3 lg:py-3.5 text-sm font-medium text-slate-800 focus:ring-4 focus:ring-adex-blue/10 focus:bg-white focus:border-adex-blue transition-all outline-none placeholder:text-slate-400">
+                    class="w-full bg-slate-100/80 border border-slate-200/80 rounded-2xl pl-11 pr-4 py-3.5 text-sm font-medium text-slate-800 focus:ring-4 focus:ring-adex-blue/10 focus:bg-white focus:border-adex-blue transition-all outline-none placeholder:text-slate-400 shadow-inner">
             </div>
         </header>
 
-        <!-- CATEGORIES MOBILE (Horizontal Scroll) -->
-        <div class="lg:hidden bg-white border-b border-slate-200 py-3 px-2 shadow-sm z-10">
-            <div id="mob-category-nav" class="flex gap-2 overflow-x-auto hide-scrollbar pb-1 px-2">
-                <!-- Inyectado vía JS -->
+        <!-- CATEGORÍAS MOBILE (Scroll Horizontal) -->
+        <div class="lg:hidden bg-white border-b border-slate-100 py-3 shadow-sm z-10">
+            <div id="mob-category-nav" class="flex gap-2 overflow-x-auto hide-scrollbar px-4 pb-1 snap-x">
+                <!-- Se inyecta vía JS -->
             </div>
         </div>
 
-        <!-- CARDS GRID AREA -->
+        <!-- ÁREA DE TARJETAS (Grid) -->
         <div class="flex-1 overflow-y-auto p-4 lg:p-8 pb-28 lg:pb-8 scroll-smooth" id="main-scroll-area">
             
-            <div class="mb-6 lg:mb-8 flex flex-col lg:flex-row lg:items-end justify-between gap-2">
+            <div class="mb-6 lg:mb-8 flex flex-col lg:flex-row lg:items-end justify-between gap-3">
                 <div>
-                    <h2 id="view-title" class="text-2xl lg:text-3xl font-black text-slate-900 tracking-tight">Directorio Global</h2>
+                    <h2 id="view-title" class="text-2xl lg:text-[28px] font-black text-adex-darkBlue tracking-tight leading-tight">Directorio Global</h2>
                     <p id="view-desc" class="text-sm lg:text-base text-slate-500 mt-1 font-medium">Explora las fuentes de inteligencia comercial.</p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span id="results-count" class="bg-adex-blue/10 text-adex-blue text-xs lg:text-sm font-bold px-3 py-1.5 rounded-lg inline-block"></span>
+                <div class="flex items-center">
+                    <span id="results-count" class="bg-adex-blue/10 text-adex-blue text-[11px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-lg inline-block border border-adex-blue/10"></span>
                 </div>
             </div>
 
-            <div id="tools-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 lg:gap-6">
-                <!-- Tarjetas -->
+            <div id="tools-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5 lg:gap-6">
+                <!-- Tarjetas dinámicas -->
             </div>
 
-            <!-- Empty State -->
+            <!-- Estado Vacío (Búsqueda sin resultados o sin favoritos) -->
             <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-center px-4">
-                <div class="w-24 h-24 bg-slate-200/50 rounded-full flex items-center justify-center mb-6">
-                    <i id="empty-icon" class="ph-fill ph-magnifying-glass text-5xl text-slate-400"></i>
+                <div class="w-24 h-24 bg-white shadow-sm border border-slate-100 rounded-full flex items-center justify-center mb-6">
+                    <i id="empty-icon" class="ph-duotone ph-magnifying-glass text-5xl text-slate-400"></i>
                 </div>
-                <h3 id="empty-title" class="text-xl font-black text-slate-800 mb-2">Sin resultados</h3>
-                <p id="empty-desc" class="text-base text-slate-500 max-w-sm mx-auto">Intenta buscar con otros términos.</p>
+                <h3 id="empty-title" class="text-xl font-black text-adex-darkBlue mb-2">Sin resultados</h3>
+                <p id="empty-desc" class="text-sm text-slate-500 max-w-sm mx-auto font-medium">Intenta buscar con otros términos.</p>
             </div>
         </div>
 
-        <!-- BOTTOM NAV (MOBILE ONLY) -->
-        <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-slate-200 shadow-nav pb-safe z-50 flex justify-around items-center px-2 py-1">
-            <button onclick="changeView('all')" id="mob-btn-all" class="flex flex-col items-center justify-center w-full py-2.5 text-adex-blue font-bold transition-colors relative">
+        <!-- NAVEGACIÓN INFERIOR (SÓLO MOBILE) -->
+        <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-nav pb-safe z-50 flex justify-around items-center px-2 py-1">
+            <button onclick="changeView('all')" id="mob-btn-all" class="flex flex-col items-center justify-center w-full py-2.5 text-adex-blue font-bold transition-colors">
                 <i class="ph-fill ph-squares-four text-[26px] mb-1"></i>
-                <span class="text-[10px] font-black uppercase tracking-wider">Explorar</span>
+                <span class="text-[10px] font-black uppercase tracking-wider">Directorio</span>
             </button>
             
-            <!-- Botón central decorativo -->
-            <div class="relative -top-5 flex-shrink-0">
-                <div class="w-14 h-14 bg-gradient-to-tr from-adex-darkBlue to-adex-blue rounded-full flex items-center justify-center shadow-lg border-4 border-[#f0f4f8] text-white">
-                    <i class="ph-bold ph-magnifying-glass text-2xl"></i>
-                </div>
-            </div>
+            <!-- Divisor decorativo -->
+            <div class="w-[1px] h-8 bg-slate-200"></div>
 
             <button onclick="changeView('favorites')" id="mob-btn-fav" class="flex flex-col items-center justify-center w-full py-2.5 text-slate-400 font-medium hover:text-slate-800 transition-colors relative">
                 <div class="relative">
-                    <i class="ph-fill ph-star text-[26px] mb-1 transition-colors" id="mob-star-icon"></i>
-                    <span id="mob-fav-counter" class="absolute -top-1 -right-2 bg-adex-red text-white text-[9px] font-black w-[18px] h-[18px] rounded-full flex items-center justify-center border-2 border-white shadow-sm">0</span>
+                    <i class="ph-bold ph-star text-[26px] mb-1 transition-colors" id="mob-star-icon"></i>
+                    <!-- Notificación de cantidad -->
+                    <span id="mob-fav-counter" class="absolute -top-1 -right-2 bg-adex-red text-white text-[9px] font-black w-[18px] h-[18px] rounded-full flex items-center justify-center border-2 border-white shadow-sm hidden">0</span>
                 </div>
                 <span class="text-[10px] font-black uppercase tracking-wider">Favoritos</span>
             </button>
@@ -232,7 +231,7 @@
     </main>
 
     <script>
-        // --- DATA DE HERRAMIENTAS (Clasificada según tus apuntes) ---
+        // --- DATA DE HERRAMIENTAS (Clasificadas) ---
         const toolsData = [
             // 1. Información Nacional
             { id: "t1", cat: "Información Nacional", name: "SUNAT", desc: "Verifica la formalidad de empresas (Consulta RUC), padrón de exportadoras y operatividad aduanera.", tags: "RUC, Formalidad, Aduanas", url: "https://e-consultaruc.sunat.gob.pe/", icon: "ph-buildings" },
@@ -284,12 +283,12 @@
             { id: "t37", cat: "Regionales y Prom.", name: "APEX Brasil", desc: "Agencia de Promoción de Exportaciones e Inversiones para ingresar al mercado de Brasil.", tags: "Brasil, Sudamérica", url: "https://www.apexbrasil.com.br", icon: "ph-star-four" }
         ];
 
-        // --- ESTADO Y LOCAL STORAGE ---
+        // --- ESTADO (STATE) Y LOCAL STORAGE ---
         let state = {
             view: 'all', 
             category: 'Todas',
             search: '',
-            favorites: JSON.parse(localStorage.getItem('adexFavoritos_Eric')) || []
+            favorites: JSON.parse(localStorage.getItem('adexFavs_EricMozombite')) || []
         };
 
         const categories = ["Todas", "Información Nacional", "Riesgo y Entorno", "Mercado y Estadísticas", "Logística y Tránsito", "Barreras y Aranceles", "Regionales y Prom."];
@@ -297,19 +296,20 @@
         const grid = document.getElementById('tools-grid');
         const searchInput = document.getElementById('search-input');
         
-        // --- INICIAR APP ---
+        // --- INICIALIZAR APP ---
         function init() {
             renderCategories();
             updateFavIndicators();
             renderCards();
 
+            // Event listener para la búsqueda en tiempo real
             searchInput.addEventListener('input', (e) => {
                 state.search = e.target.value.toLowerCase();
                 renderCards();
             });
         }
 
-        // --- RENDERIZAR MENÚS ---
+        // --- RENDERIZAR MENÚS DE CATEGORÍAS ---
         function renderCategories() {
             const dtNav = document.getElementById('dt-category-nav');
             const mobNav = document.getElementById('mob-category-nav');
@@ -318,27 +318,27 @@
             mobNav.innerHTML = '';
 
             categories.forEach(cat => {
-                // Config Iconos
+                // Iconos por categoría para Desktop
                 let icon = "ph-folder";
-                if(cat==="Todas") icon = "ph-list";
-                if(cat==="Información Nacional") icon = "ph-flag";
+                if(cat==="Todas") icon = "ph-list-dashes";
+                if(cat==="Información Nacional") icon = "ph-flag-pennant";
                 if(cat==="Riesgo y Entorno") icon = "ph-shield-warning";
-                if(cat==="Mercado y Estadísticas") icon = "ph-chart-bar";
+                if(cat==="Mercado y Estadísticas") icon = "ph-chart-line-up";
                 if(cat==="Logística y Tránsito") icon = "ph-globe-hemisphere-west";
                 if(cat==="Barreras y Aranceles") icon = "ph-lock-key";
                 if(cat==="Regionales y Prom.") icon = "ph-map-trifold";
 
-                // Desktop Menu
+                // Botón Desktop (Sidebar)
                 const dtBtn = document.createElement('button');
-                dtBtn.className = `w-full text-left px-4 py-3 rounded-xl text-[13px] font-bold transition-all flex items-center gap-3 border ${cat === 'Todas' ? 'bg-white/10 text-white border-white/5 shadow-inner' : 'border-transparent text-blue-200/80 hover:bg-white/5 hover:text-white'}`;
+                dtBtn.className = `w-full text-left px-4 py-3 rounded-xl text-[13px] font-bold transition-all flex items-center gap-3 border ${cat === 'Todas' ? 'bg-white/10 text-white border-white/10 shadow-inner' : 'border-transparent text-blue-200/70 hover:bg-white/5 hover:text-white'}`;
                 dtBtn.id = `dt-cat-${cat.replace(/\s+/g, '-')}`;
                 dtBtn.onclick = () => setCategory(cat);
-                dtBtn.innerHTML = `<i class="${icon} text-xl opacity-90"></i> ${cat}`;
+                dtBtn.innerHTML = `<i class="${icon} text-[20px] opacity-90"></i> ${cat}`;
                 dtNav.appendChild(dtBtn);
 
-                // Mobile Menu (Pills)
+                // Botón Mobile (Píldoras scrollables)
                 const mobBtn = document.createElement('button');
-                mobBtn.className = `flex-shrink-0 px-4 py-2 rounded-xl text-[13px] font-bold transition-all border ${cat === 'Todas' ? 'bg-adex-darkBlue text-white border-adex-darkBlue shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`;
+                mobBtn.className = `snap-start flex-shrink-0 px-4 py-2.5 rounded-xl text-[12px] font-bold transition-all border ${cat === 'Todas' ? 'bg-adex-darkBlue text-white border-adex-darkBlue shadow-md' : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50 hover:text-slate-800'}`;
                 mobBtn.id = `mob-cat-${cat.replace(/\s+/g, '-')}`;
                 mobBtn.onclick = () => setCategory(cat);
                 mobBtn.innerHTML = cat;
@@ -346,24 +346,25 @@
             });
         }
 
-        // --- NAVEGACIÓN ---
+        // --- LÓGICA DE NAVEGACIÓN Y VISTAS ---
         function changeView(viewType) {
             state.view = viewType;
             state.category = 'Todas'; 
             state.search = ''; 
             searchInput.value = '';
             
+            // Actualizar Títulos
             document.getElementById('view-title').textContent = viewType === 'all' ? "Directorio Global" : "Tus Herramientas Favoritas";
             document.getElementById('view-desc').textContent = viewType === 'all' ? "Explora las fuentes de inteligencia comercial." : "Acceso rápido a las plataformas que has marcado con estrella.";
 
-            // UI Updates Desktop
-            document.getElementById('dt-btn-all').className = viewType === 'all' ? "w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-adex-blue text-white font-bold transition-all shadow-md" : "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-blue-200 hover:bg-white/5 font-semibold transition-all border border-transparent";
-            document.getElementById('dt-btn-fav').className = viewType === 'favorites' ? "w-full flex items-center justify-between px-4 py-3 rounded-xl bg-yellow-400/10 border border-yellow-400/20 text-yellow-400 font-bold transition-all" : "w-full flex items-center justify-between px-4 py-3 rounded-xl text-blue-200 hover:bg-white/5 font-semibold transition-all group border border-transparent";
+            // UI Desktop
+            document.getElementById('dt-btn-all').className = viewType === 'all' ? "w-full flex items-center gap-3 px-4 py-3.5 rounded-xl bg-adex-blue text-white font-bold transition-all shadow-md" : "w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-blue-200 hover:bg-white/5 font-semibold transition-all border border-transparent";
+            document.getElementById('dt-btn-fav').className = viewType === 'favorites' ? "w-full flex items-center justify-between px-4 py-3.5 rounded-xl bg-yellow-400/15 border border-yellow-400/30 text-yellow-400 font-bold transition-all" : "w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-blue-200 hover:bg-white/5 font-semibold transition-all group border border-transparent";
             
-            // UI Updates Mobile
-            document.getElementById('mob-btn-all').className = viewType === 'all' ? "flex flex-col items-center justify-center w-full py-2.5 text-adex-blue font-bold" : "flex flex-col items-center justify-center w-full py-2.5 text-slate-400 font-medium hover:text-slate-800 transition-colors";
-            document.getElementById('mob-btn-fav').className = viewType === 'favorites' ? "flex flex-col items-center justify-center w-full py-2.5 text-yellow-500 font-bold relative" : "flex flex-col items-center justify-center w-full py-2.5 text-slate-400 font-medium hover:text-slate-800 transition-colors relative";
-            document.getElementById('mob-star-icon').className = viewType === 'favorites' ? "ph-fill ph-star text-[26px] mb-1 text-yellow-500" : "ph-fill ph-star text-[26px] mb-1";
+            // UI Mobile
+            document.getElementById('mob-btn-all').className = viewType === 'all' ? "flex flex-col items-center justify-center w-full py-2.5 text-adex-blue font-bold transition-colors" : "flex flex-col items-center justify-center w-full py-2.5 text-slate-400 font-medium hover:text-slate-800 transition-colors";
+            document.getElementById('mob-btn-fav').className = viewType === 'favorites' ? "flex flex-col items-center justify-center w-full py-2.5 text-yellow-500 font-bold relative transition-colors" : "flex flex-col items-center justify-center w-full py-2.5 text-slate-400 font-medium hover:text-slate-800 transition-colors relative";
+            document.getElementById('mob-star-icon').className = viewType === 'favorites' ? "ph-fill ph-star text-[26px] mb-1 text-yellow-500 drop-shadow-sm" : "ph-bold ph-star text-[26px] mb-1";
 
             updateCategoryUI('Todas');
             renderCards();
@@ -374,7 +375,7 @@
             state.category = cat;
             
             document.getElementById('view-title').textContent = cat === "Todas" ? "Directorio Global" : cat;
-            document.getElementById('view-desc').textContent = cat === "Todas" ? "Explora las fuentes de inteligencia comercial." : `Filtro aplicado: Herramientas de ${cat}.`;
+            document.getElementById('view-desc').textContent = cat === "Todas" ? "Explora las fuentes de inteligencia comercial." : `Filtro: Herramientas de ${cat}.`;
 
             updateCategoryUI(cat);
             renderCards();
@@ -387,36 +388,40 @@
                 const mobBtn = document.getElementById(`mob-cat-${idSuffix}`);
                 
                 if (c === cat) {
-                    if(dtBtn) dtBtn.className = "w-full text-left px-4 py-3 rounded-xl text-[13px] font-bold transition-all flex items-center gap-3 border bg-white/10 text-white border-white/5 shadow-inner";
-                    if(mobBtn) mobBtn.className = "flex-shrink-0 px-4 py-2 rounded-xl text-[13px] font-bold transition-all border bg-adex-darkBlue text-white border-adex-darkBlue shadow-md";
+                    if(dtBtn) dtBtn.className = "w-full text-left px-4 py-3 rounded-xl text-[13px] font-bold transition-all flex items-center gap-3 border bg-white/10 text-white border-white/10 shadow-inner";
+                    if(mobBtn) mobBtn.className = "snap-start flex-shrink-0 px-4 py-2.5 rounded-xl text-[12px] font-bold transition-all border bg-adex-darkBlue text-white border-adex-darkBlue shadow-md";
                 } else {
-                    if(dtBtn) dtBtn.className = "w-full text-left px-4 py-3 rounded-xl text-[13px] font-bold transition-all flex items-center gap-3 border border-transparent text-blue-200/80 hover:bg-white/5 hover:text-white";
-                    if(mobBtn) mobBtn.className = "flex-shrink-0 px-4 py-2 rounded-xl text-[13px] font-bold transition-all border bg-white text-slate-600 border-slate-200 hover:bg-slate-50";
+                    if(dtBtn) dtBtn.className = "w-full text-left px-4 py-3 rounded-xl text-[13px] font-bold transition-all flex items-center gap-3 border border-transparent text-blue-200/70 hover:bg-white/5 hover:text-white";
+                    if(mobBtn) mobBtn.className = "snap-start flex-shrink-0 px-4 py-2.5 rounded-xl text-[12px] font-bold transition-all border bg-white text-slate-500 border-slate-200 hover:bg-slate-50 hover:text-slate-800";
                 }
             });
         }
 
-        // --- FAVORITOS (LOGICA Y ESTRELLAS) ---
+        // --- LÓGICA DE FAVORITOS (MARCAR/DESMARCAR ESTRELLA) ---
         function toggleFavorite(id, event) {
             event.preventDefault(); 
+            event.stopPropagation();
+            
             const index = state.favorites.indexOf(id);
             const iconEl = document.getElementById(`star-icon-${id}`);
 
             if (index > -1) {
                 // Quitar de favoritos
                 state.favorites.splice(index, 1);
-                iconEl.className = "ph-bold ph-star text-[22px] text-slate-300 group-hover:text-yellow-400 transition-colors";
+                iconEl.className = "ph-bold ph-star text-[24px] text-slate-300 group-hover:text-yellow-400 transition-colors";
             } else {
                 // Agregar a favoritos
                 state.favorites.push(id);
-                iconEl.className = "ph-fill ph-star text-[22px] text-yellow-400 drop-shadow-sm";
+                iconEl.className = "ph-fill ph-star text-[24px] text-yellow-400 drop-shadow-sm";
                 iconEl.classList.add('star-animated');
-                setTimeout(() => iconEl.classList.remove('star-animated'), 400);
+                setTimeout(() => iconEl.classList.remove('star-animated'), 400); // Quita clase tras animación
             }
             
-            localStorage.setItem('adexFavoritos_Eric', JSON.stringify(state.favorites));
+            // Guardar en Storage del Navegador
+            localStorage.setItem('adexFavs_EricMozombite', JSON.stringify(state.favorites));
             updateFavIndicators();
             
+            // Si estoy en la vista de favoritos y desmarco una, redibujar tras un instante
             if (state.view === 'favorites') {
                 setTimeout(renderCards, 300);
             }
@@ -425,12 +430,12 @@
         function updateFavIndicators() {
             const count = state.favorites.length;
             
-            // Badge Desktop
+            // Indicador Desktop
             const dtCounter = document.getElementById('dt-fav-counter');
             dtCounter.textContent = count;
             dtCounter.className = count > 0 ? "bg-yellow-400 text-adex-darkBlue text-xs py-1 px-2.5 rounded-full font-black shadow-sm" : "bg-white/10 text-white text-xs py-1 px-2.5 rounded-full font-bold";
             
-            // Badge Mobile
+            // Indicador Mobile
             const mobCounter = document.getElementById('mob-fav-counter');
             mobCounter.textContent = count;
             if (count > 0) {
@@ -440,11 +445,12 @@
             }
         }
 
-        // --- RENDERIZAR TARJETAS ---
+        // --- RENDERIZADO DE LAS FICHAS (TARJETAS) ---
         function renderCards() {
             grid.innerHTML = '';
             const emptyState = document.getElementById('empty-state');
             
+            // Filtrar Data
             const filteredData = toolsData.filter(tool => {
                 if (state.view === 'favorites' && !state.favorites.includes(tool.id)) return false;
                 if (state.view === 'all' && state.category !== 'Todas' && tool.cat !== state.category) return false;
@@ -455,8 +461,10 @@
                 return true;
             });
 
+            // Actualizar Contador
             document.getElementById('results-count').textContent = `${filteredData.length} resultados`;
 
+            // Mostrar "Estado Vacío" si no hay resultados
             if (filteredData.length === 0) {
                 grid.classList.add('hidden');
                 emptyState.classList.remove('hidden');
@@ -467,58 +475,60 @@
                     document.getElementById('empty-title').textContent = "Tu lista está vacía";
                     document.getElementById('empty-desc').textContent = "Toca la estrella en cualquier herramienta para guardarla aquí.";
                 } else {
-                    document.getElementById('empty-icon').className = "ph-bold ph-magnifying-glass-minus text-slate-300 text-6xl";
+                    document.getElementById('empty-icon').className = "ph-duotone ph-magnifying-glass-minus text-slate-300 text-6xl";
                     document.getElementById('empty-title').textContent = "No hay coincidencias";
                     document.getElementById('empty-desc').textContent = "Intenta buscar con otra palabra clave como 'Aduanas' o 'TLC'.";
                 }
                 return;
             }
 
+            // Ocultar "Estado Vacío" y mostrar grid
             grid.classList.remove('hidden');
             emptyState.classList.add('hidden');
             emptyState.classList.remove('flex');
 
+            // Dibujar Tarjetas
             filteredData.forEach((tool, i) => {
                 const isFav = state.favorites.includes(tool.id);
-                // Si es favorito, estrella amarilla llena. Si no, estrella gris con borde grueso.
-                const starIcon = isFav ? "ph-fill ph-star text-[22px] text-yellow-400 drop-shadow-sm" : "ph-bold ph-star text-[22px] text-slate-300 group-hover:text-yellow-400 transition-colors";
+                // Si es favorito -> Estrella Amarilla. Si no -> Estrella gris clara
+                const starIcon = isFav ? "ph-fill ph-star text-[24px] text-yellow-400 drop-shadow-sm" : "ph-bold ph-star text-[24px] text-slate-300 group-hover:text-yellow-400 transition-colors";
 
                 const card = document.createElement('div');
-                card.className = "tool-card bg-white rounded-[20px] shadow-card hover:shadow-card-hover border border-slate-200/60 flex flex-col overflow-hidden animate-fade-in relative group";
-                card.style.animationDelay = `${i * 0.03}s`;
+                card.className = "tool-card bg-white rounded-[24px] shadow-card hover:shadow-card-hover border border-slate-200/80 flex flex-col overflow-hidden animate-fade-in relative group";
+                card.style.animationDelay = `${i * 0.04}s`; // Efecto cascada
                 
                 card.innerHTML = `
                     <div class="p-5 lg:p-6 flex-grow flex flex-col relative z-10">
                         
-                        <!-- Header: Icono + Estrella -->
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 flex items-center justify-center text-adex-blue shadow-sm">
-                                <i class="ph-bold ${tool.icon} text-2xl"></i>
+                        <!-- Header de Tarjeta: Icono Redondeado + Estrella Favoritos -->
+                        <div class="flex justify-between items-start mb-5">
+                            <div class="w-[52px] h-[52px] rounded-[18px] bg-gradient-to-b from-slate-50 to-slate-100 border border-slate-200 flex items-center justify-center text-adex-blue shadow-sm">
+                                <i class="ph-duotone ${tool.icon} text-[28px]"></i>
                             </div>
                             
-                            <!-- Botón de Favorito Interactivo -->
-                            <button id="star-btn-${tool.id}" onclick="toggleFavorite('${tool.id}', event)" class="star-btn p-2 -mr-2 -mt-2 rounded-full hover:bg-slate-50 transition-colors group focus:outline-none z-20" aria-label="Marcar como favorito">
+                            <!-- Botón Estrella -->
+                            <button id="star-btn-${tool.id}" onclick="toggleFavorite('${tool.id}', event)" class="star-btn p-2 -mr-2 -mt-2 rounded-full hover:bg-slate-50 transition-colors group focus:outline-none z-20 cursor-pointer" aria-label="Favorito">
                                 <i id="star-icon-${tool.id}" class="${starIcon}"></i>
                             </button>
                         </div>
                         
                         <!-- Textos -->
                         <span class="text-[10px] font-black uppercase tracking-widest text-adex-red mb-1.5 block">${tool.cat}</span>
-                        <h3 class="text-[19px] font-black text-slate-900 mb-2 leading-tight">${tool.name}</h3>
+                        <h3 class="text-[20px] font-black text-slate-900 mb-2.5 leading-tight tracking-tight">${tool.name}</h3>
                         <p class="text-[14px] text-slate-500 font-medium leading-relaxed flex-grow">${tool.desc}</p>
                         
-                        <!-- Etiquetas (Tags) -->
+                        <!-- Etiquetas (Píldoras inferiores) -->
                         <div class="mt-5 pt-4 border-t border-slate-100 flex flex-wrap gap-1.5">
                             ${tool.tags.split(', ').map(tag => 
-                                `<span class="bg-slate-100/80 text-slate-600 text-[10px] font-bold px-2.5 py-1 rounded-md border border-slate-200/60">${tag}</span>`
+                                `<span class="bg-slate-50 text-slate-600 text-[10px] font-bold px-2.5 py-1.5 rounded-lg border border-slate-200/80">${tag}</span>`
                             ).join('')}
                         </div>
                     </div>
                     
-                    <!-- Botón de Enlace -->
-                    <a href="${tool.url}" target="_blank" rel="noopener noreferrer" class="bg-slate-50/50 border-t border-slate-100 px-5 lg:px-6 py-4 flex items-center justify-between text-[13px] font-black text-adex-blue hover:bg-adex-blue hover:text-white transition-all duration-300 group/link">
+                    <!-- Botón de Acción Inferior -->
+                    <a href="${tool.url}" target="_blank" rel="noopener noreferrer" class="bg-slate-50/50 border-t border-slate-100 px-5 lg:px-6 py-4 flex items-center justify-between text-[13px] font-black text-adex-blue hover:bg-adex-blue hover:text-white transition-colors duration-300 group/link">
                         <span>ACCEDER A LA PLATAFORMA</span>
-                        <div class="w-8 h-8 rounded-full bg-white group-hover/link:bg-white/20 flex items-center justify-center transition-colors shadow-sm">
+                        <div class="w-8 h-8 rounded-full bg-white border border-slate-200 group-hover/link:border-transparent group-hover/link:bg-white/20 flex items-center justify-center transition-all shadow-sm">
                             <i class="ph-bold ph-arrow-right group-hover/link:translate-x-0.5 transition-transform"></i>
                         </div>
                     </a>
@@ -528,6 +538,7 @@
             });
         }
 
+        // Ejecutar App
         init();
     </script>
 </body>
