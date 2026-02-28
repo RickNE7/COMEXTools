@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Inteligencia Comercial | ADEX Escuela</title>
     
-    <!-- Favicon exacto solicitado -->
+    <!-- Favicon ADEX -->
     <link rel="icon" href="https://favicon.im/www.adexperu.org.pe" />
     
-    <!-- Google Fonts: Inter para un look moderno de app -->
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -27,21 +27,21 @@
                             blue: '#003399',
                             darkBlue: '#001a4d',
                             red: '#cc0000',
-                            gray: '#f4f7fb'
+                            gray: '#f8fafc'
                         }
                     },
                     boxShadow: {
-                        'nav': '0 -4px 20px rgba(0,0,0,0.06)',
-                        'header': '0 4px 20px rgba(0,0,0,0.04)',
-                        'card': '0 8px 20px rgba(0, 0, 0, 0.04)',
-                        'card-hover': '0 15px 35px rgba(0, 51, 153, 0.12)'
+                        'nav': '0 -8px 30px rgba(0,0,0,0.08)',
+                        'header': '0 4px 30px rgba(0,0,0,0.03)',
+                        'card': '0 10px 25px rgba(0, 0, 0, 0.05)',
+                        'card-hover': '0 20px 40px rgba(0, 51, 153, 0.15)'
                     }
                 }
             }
         }
     </script>
     
-    <!-- Phosphor Icons para iconografía limpia -->
+    <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
@@ -56,7 +56,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Permitir escribir en los buscadores */
+        /* Permitir escribir solo en los buscadores */
         input[type="text"] {
             -webkit-user-select: auto;
             -khtml-user-select: auto;
@@ -66,359 +66,348 @@
         }
 
         body { 
-            background-color: #f4f7fb; 
+            background-color: #f8fafc; 
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
         
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Animaciones para las tarjetas y estrellas */
-        .card-app {
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        /* Efectos Glassmorphism modernos */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255,255,255,0.5);
         }
-        .card-app:active {
-            transform: scale(0.97);
+
+        /* Animaciones de Tarjetas */
+        .tool-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-origin: center;
         }
-        .card-app:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 51, 153, 0.3);
+        .tool-card:active {
+            transform: scale(0.96);
+        }
+        .tool-card:hover {
+            transform: translateY(-8px);
         }
         
+        /* Animación de la Estrella */
         .star-btn {
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.2s ease;
         }
         .star-btn:active {
-            transform: scale(0.7);
+            transform: scale(0.8);
         }
         @keyframes starPop {
             0% { transform: scale(1); }
-            50% { transform: scale(1.4); }
-            100% { transform: scale(1); }
+            50% { transform: scale(1.5) rotate(15deg); }
+            100% { transform: scale(1) rotate(0deg); }
         }
         .star-animated {
-            animation: starPop 0.4s ease-out;
+            animation: starPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        /* Entrada de elementos */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-in {
-            animation: fadeIn 0.4s ease-out forwards;
-        }
-        
-        /* Efecto Glassmorphism */
-        .glass-header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+        .animate-enter {
+            animation: slideUpFade 0.5s ease-out forwards;
         }
     </style>
 </head>
-<!-- Bloqueo nativo de clic derecho en el body -->
 <body oncontextmenu="return false;" class="text-slate-800 antialiased h-screen flex flex-col overflow-hidden">
 
-    <!-- HEADER (Encabezado Fijo) -->
-    <header class="glass-header shadow-header z-50 sticky top-0 border-b border-slate-100">
-        <div class="max-w-7xl mx-auto px-4 lg:px-8">
-            <div class="flex items-center justify-between h-20">
+    <!-- ENCABEZADO SUPERIOR -->
+    <header class="bg-white shadow-header z-40 shrink-0 border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
                 
-                <!-- Logo ADEX Escuela -->
+                <!-- Branding ADEX Escuela -->
                 <div class="flex items-center gap-3">
-                    <div class="bg-white p-1.5 rounded-xl shadow-sm border border-slate-200 flex items-center justify-center">
-                        <img src="https://favicon.im/www.adexperu.org.pe" alt="ADEX" class="w-8 h-8 lg:w-9 lg:h-9 object-contain rounded-lg">
+                    <div class="bg-slate-50 p-2 rounded-2xl border border-slate-100 shadow-sm">
+                        <img src="https://favicon.im/www.adexperu.org.pe" alt="ADEX" class="w-8 h-8 object-contain">
                     </div>
-                    <div>
-                        <h1 class="text-xl lg:text-2xl font-black text-adex-darkBlue leading-none tracking-tight">ADEX</h1>
-                        <span class="text-[10px] lg:text-[11px] font-black text-adex-red uppercase tracking-[0.25em] block mt-0.5">Escuela</span>
+                    <div class="flex flex-col">
+                        <span class="text-2xl font-black text-adex-darkBlue leading-none tracking-tight">ADEX</span>
+                        <span class="text-[10px] font-black text-adex-red uppercase tracking-[0.3em] leading-tight">Escuela</span>
                     </div>
-                </div>
-
-                <!-- Buscador Desktop (Oculto en móvil) -->
-                <div class="hidden lg:flex flex-1 max-w-xl mx-8 relative group">
-                    <i class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-adex-blue transition-colors"></i>
-                    <input type="text" id="search-desktop" placeholder="Buscar herramienta, país, código..." 
-                        class="w-full bg-slate-100/70 border border-slate-200 rounded-2xl pl-11 pr-4 py-3 text-sm font-medium text-slate-800 focus:ring-4 focus:ring-adex-blue/10 focus:bg-white focus:border-adex-blue transition-all outline-none placeholder:text-slate-400">
                 </div>
 
                 <!-- Créditos del Desarrollador -->
-                <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
-                        <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-adex-red to-orange-500 text-white text-[10px] font-black flex items-center justify-center shadow-inner">EM</div>
-                        <div class="flex flex-col hidden sm:flex">
-                            <span class="text-[8px] uppercase tracking-wider text-slate-400 font-bold leading-none">Desarrollador</span>
-                            <span class="text-[11px] font-bold text-adex-darkBlue leading-tight">Eric Mozombite</span>
-                        </div>
+                <div class="flex items-center bg-slate-50 pl-1.5 pr-4 py-1.5 rounded-full border border-slate-200 shadow-sm">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-adex-red to-orange-500 text-white flex items-center justify-center font-bold text-xs shadow-md mr-2">
+                        EM
+                    </div>
+                    <div class="flex flex-col text-right">
+                        <span class="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Desarrollo</span>
+                        <span class="text-xs font-black text-slate-800">Eric Mozombite</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Buscador Mobile (Visible solo en móvil) -->
-            <div class="lg:hidden pb-4">
-                <div class="relative w-full group">
-                    <i class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-adex-blue transition-colors"></i>
-                    <input type="text" id="search-mobile" placeholder="Buscar herramienta..." 
-                        class="w-full bg-slate-100 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-sm font-medium text-slate-800 focus:ring-4 focus:ring-adex-blue/10 focus:bg-white focus:border-adex-blue transition-all outline-none placeholder:text-slate-400">
-                </div>
+            <!-- Buscador Universal -->
+            <div class="mt-5 relative group">
+                <i class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl group-focus-within:text-adex-blue transition-colors"></i>
+                <input type="text" id="search-input" placeholder="Buscar por nombre, categoría o palabra clave..." 
+                    class="w-full bg-slate-100/80 border-2 border-transparent rounded-2xl pl-12 pr-4 py-3.5 text-sm font-semibold text-slate-800 focus:bg-white focus:border-adex-blue/30 focus:shadow-md transition-all outline-none placeholder:text-slate-400 placeholder:font-medium">
             </div>
+        </div>
 
-            <!-- Navegación por Píldoras (Categorías) -->
-            <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar py-3 border-t border-slate-100/50" id="category-nav">
-                <!-- Inyectado vía JavaScript -->
+        <!-- Filtros por Categoría (Scroll Horizontal) -->
+        <div class="border-t border-slate-100 bg-white">
+            <div class="max-w-7xl mx-auto px-4 lg:px-8">
+                <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar py-3" id="category-nav">
+                    <!-- Inyectado vía JS -->
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- ÁREA PRINCIPAL DE CONTENIDO -->
-    <!-- pt-6 para dar respiro arriba, pb-28 para que las tarjetas no queden ocultas detrás de la barra de navegación inferior -->
-    <main class="flex-1 overflow-y-auto w-full relative pt-6 pb-28 scroll-smooth" id="main-scroll-area">
+    <!-- ÁREA DE CONTENIDO (Grilla de Herramientas) -->
+    <!-- pb-32 es el padding clave para que la navegación flotante inferior no tape la última tarjeta -->
+    <main class="flex-1 overflow-y-auto w-full relative pt-6 pb-36" id="main-container">
         <div class="max-w-7xl mx-auto px-4 lg:px-8">
             
-            <!-- Títulos de Sección Dinámicos -->
-            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6">
+            <!-- Encabezado de Vista -->
+            <div class="flex items-center justify-between mb-6">
                 <div>
                     <h2 id="view-title" class="text-2xl lg:text-3xl font-black text-slate-900 tracking-tight">Directorio Completo</h2>
-                    <p id="view-desc" class="text-sm text-slate-500 mt-1 font-medium">Toca cualquier tarjeta para ingresar directamente.</p>
+                    <p id="view-desc" class="text-sm text-slate-500 mt-1 font-medium">Toca cualquier tarjeta para abrirla.</p>
                 </div>
-                <div>
-                    <span id="results-count" class="inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-white border border-slate-200 text-[11px] font-bold text-adex-blue shadow-sm">
-                        Cargando...
-                    </span>
+                <div class="bg-white px-3 py-1 rounded-full border border-slate-200 shadow-sm">
+                    <span id="results-count" class="text-xs font-bold text-adex-blue">0</span>
                 </div>
             </div>
 
-            <!-- Grid de Herramientas -->
-            <div id="tools-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
-                <!-- Las tarjetas se inyectan aquí vía JavaScript -->
+            <!-- Grilla Principal -->
+            <div id="tools-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                <!-- Tarjetas inyectadas vía JS -->
             </div>
 
-            <!-- Pantalla Vacía (Cuando no hay resultados o favoritos) -->
-            <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-center animate-fade-in">
-                <div class="w-24 h-24 bg-white shadow-sm border border-slate-100 rounded-full flex items-center justify-center mb-6">
-                    <i id="empty-icon" class="ph-duotone ph-star text-5xl text-slate-300"></i>
+            <!-- Estado Vacío -->
+            <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-center animate-enter">
+                <div class="w-24 h-24 bg-white shadow-sm border border-slate-100 rounded-3xl flex items-center justify-center mb-6 rotate-3">
+                    <i id="empty-icon" class="ph-duotone ph-star text-6xl text-slate-300"></i>
                 </div>
-                <h3 id="empty-title" class="text-xl font-black text-slate-800 mb-2">Sección vacía</h3>
-                <p id="empty-desc" class="text-sm text-slate-500 max-w-xs mx-auto font-medium">No se encontraron resultados para mostrar en esta pantalla.</p>
+                <h3 id="empty-title" class="text-xl font-black text-slate-800 mb-2">No hay herramientas</h3>
+                <p id="empty-desc" class="text-sm text-slate-500 max-w-xs mx-auto font-medium">No se encontraron resultados para tu búsqueda actual.</p>
             </div>
+            
+            <!-- Espaciador final para asegurar el scroll completo -->
+            <div class="h-10 w-full"></div>
         </div>
     </main>
 
-    <!-- NAVEGACIÓN INFERIOR (Estilo App Móvil) -->
-    <nav class="fixed bottom-0 left-0 right-0 glass-header border-t border-slate-200 shadow-nav z-50 pb-safe px-4 py-2 lg:py-3 flex justify-around lg:justify-center lg:gap-20">
-        <!-- Botón Directorio -->
-        <button onclick="changeView('all')" id="nav-btn-all" class="flex flex-col items-center justify-center w-20 py-1 text-adex-blue font-bold transition-all transform hover:scale-105">
-            <i class="ph-fill ph-squares-four text-3xl mb-1"></i>
-            <span class="text-[10px] lg:text-[11px] font-black uppercase tracking-wider">Directorio</span>
-        </button>
-        
-        <!-- Botón Favoritos -->
-        <button onclick="changeView('favorites')" id="nav-btn-fav" class="flex flex-col items-center justify-center w-20 py-1 text-slate-400 hover:text-yellow-500 font-medium transition-all transform hover:scale-105 relative">
-            <div class="relative">
-                <i class="ph-bold ph-star text-3xl mb-1 transition-colors" id="nav-star-icon"></i>
-                <span id="nav-fav-counter" class="absolute -top-1 -right-2 bg-adex-red text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm hidden">0</span>
-            </div>
-            <span class="text-[10px] lg:text-[11px] font-black uppercase tracking-wider">Favoritos</span>
-        </button>
-    </nav>
+    <!-- NAVEGACIÓN INFERIOR FLOTANTE -->
+    <div class="fixed bottom-0 left-0 right-0 z-50 pb-safe pt-2 pointer-events-none">
+        <div class="max-w-md mx-auto px-4 pb-6 pointer-events-auto">
+            <nav class="glass-panel shadow-nav rounded-3xl p-2 flex justify-between items-center relative overflow-hidden">
+                <!-- Indicador activo (Fondo) -->
+                <div id="nav-indicator" class="absolute w-1/2 h-full top-0 left-0 bg-white/60 rounded-3xl transition-transform duration-300 ease-out z-0"></div>
+                
+                <!-- Botón Directorio -->
+                <button onclick="changeView('all')" id="nav-btn-all" class="relative z-10 flex-1 flex flex-col items-center justify-center py-3 text-adex-blue transition-colors">
+                    <i id="icon-all" class="ph-fill ph-squares-four text-2xl mb-1"></i>
+                    <span class="text-[10px] font-black uppercase tracking-wider">Directorio</span>
+                </button>
+                
+                <!-- Botón Favoritos -->
+                <button onclick="changeView('favorites')" id="nav-btn-fav" class="relative z-10 flex-1 flex flex-col items-center justify-center py-3 text-slate-400 hover:text-yellow-500 transition-colors">
+                    <div class="relative">
+                        <i id="icon-fav" class="ph-bold ph-star text-2xl mb-1 transition-all"></i>
+                        <span id="fav-badge" class="absolute -top-1.5 -right-2.5 bg-adex-red text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-sm hidden">0</span>
+                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-wider">Favoritos</span>
+                </button>
+            </nav>
+        </div>
+    </div>
 
-    <!-- SCRIPTS DE SEGURIDAD ANTICOPIA -->
+    <!-- SCRIPTS DE SEGURIDAD -->
     <script>
-        // Prevenir clic derecho
-        document.addEventListener('contextmenu', event => event.preventDefault());
+        // Bloquear clic derecho
+        document.addEventListener('contextmenu', e => e.preventDefault());
         
-        // Prevenir atajos de teclado para copiar (Ctrl+C, Ctrl+X, Cmd+C, Cmd+X)
+        // Bloquear atajos de teclado para copiar o inspeccionar
         document.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'a')) {
-                e.preventDefault();
-            }
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'a' || e.key === 'u' || e.key === 's')) e.preventDefault();
+            if (e.key === 'F12') e.preventDefault();
         });
 
-        // Prevenir evento copy nativo
-        document.addEventListener('copy', event => {
-            event.preventDefault();
-        });
-        
-        // Prevenir selección de texto (excepto en inputs)
-        document.addEventListener('selectstart', event => {
-            if (event.target.tagName !== 'INPUT') {
-                event.preventDefault();
-            }
-        });
+        // Prevenir arrastrar imágenes o links
+        document.addEventListener('dragstart', e => e.preventDefault());
     </script>
 
-    <!-- SCRIPT PRINCIPAL DE LA APP -->
+    <!-- LÓGICA DE LA APLICACIÓN -->
     <script>
-        // --- BASE DE DATOS DE HERRAMIENTAS (Las 37 herramientas) ---
+        // 1. BASE DE DATOS
         const toolsData = [
-            // 1. Información Nacional
-            { id: "t1", cat: "Nacional (Perú)", name: "SUNAT", desc: "Verifica formalidad de empresas (Consulta RUC), padrón de exportadoras y operatividad aduanera.", tags: ["RUC", "Aduanas"], url: "https://e-consultaruc.sunat.gob.pe/", icon: "ph-buildings" },
-            { id: "t2", cat: "Nacional (Perú)", name: "INEI", desc: "Zonas de producción, estadísticas de Producción Nacional y censos demográficos.", tags: ["Censo", "PBI"], url: "https://www.gob.pe/inei", icon: "ph-chart-pie-slice" },
-            { id: "t3", cat: "Nacional (Perú)", name: "SIEA MIDAGRI", desc: "Calendario de siembra, cosecha y estadísticas de producción agrícola.", tags: ["Agro", "Cosecha"], url: "https://siea.midagri.gob.pe/portal/", icon: "ph-plant" },
+            { id: "t1", cat: "Nacional (Perú)", name: "SUNAT", desc: "Verifica formalidad de empresas (Consulta RUC), exportadoras y operatividad aduanera.", tags: ["RUC", "Aduanas"], url: "https://e-consultaruc.sunat.gob.pe/", icon: "ph-buildings" },
+            { id: "t2", cat: "Nacional (Perú)", name: "INEI", desc: "Zonas de producción, Estadísticas de Producción Nacional y censos demográficos.", tags: ["Censo", "PBI"], url: "https://www.gob.pe/inei", icon: "ph-chart-pie-slice" },
+            { id: "t3", cat: "Nacional (Perú)", name: "SIEA MIDAGRI", desc: "Calendario de producción agrícola, cosechas y estadísticas del sector agrario.", tags: ["Agro", "Cosecha"], url: "https://siea.midagri.gob.pe/portal/", icon: "ph-plant" },
             { id: "t4", cat: "Nacional (Perú)", name: "Catálogo MIDAGRI", desc: "Directorio oficial de proveedores y productores agrarios a nivel nacional.", tags: ["Proveedores", "Agro"], url: "https://catalogo.midagri.gob.pe/", icon: "ph-address-book" },
             { id: "t5", cat: "Nacional (Perú)", name: "PRODUCE", desc: "Datos de producción marina (pesca y acuicultura) e industrial.", tags: ["Pesca", "Industria"], url: "https://ogeiee.produce.gob.pe", icon: "ph-factory" },
-            { id: "t6", cat: "Nacional (Perú)", name: "SERFOR", desc: "Estadísticas sobre flora, hierbas, fauna silvestre y productos forestales.", tags: ["Flora", "Fauna"], url: "https://sniffs.serfor.gob.pe", icon: "ph-tree" },
-            { id: "t7", cat: "Nacional (Perú)", name: "ADT (ADEX)", desc: "Importaciones y exportaciones peruanas detalladas por puerto/aduana.", tags: ["ADEX", "Puertos"], url: "https://www.adexdatatrade.com", icon: "ph-chart-line-up" },
-            { id: "t8", cat: "Nacional (Perú)", name: "Veritrade", desc: "Búsqueda directa de empresas importadoras y exportadoras reales.", tags: ["Competencia", "Importadores"], url: "https://www.veritradecorp.com", icon: "ph-detective" },
-            { id: "t9", cat: "Nacional (Perú)", name: "TLCs Perú", desc: "Portal oficial de MINCETUR con el detalle de los Acuerdos Comerciales.", tags: ["TLC", "Convenios"], url: "https://www.acuerdoscomerciales.gob.pe", icon: "ph-handshake" },
-            { id: "t10", cat: "Nacional (Perú)", name: "Tu Mercado Perú", desc: "Vitrina de PROMPERÚ que conecta oferta regional con compradores globales.", tags: ["PromPerú", "B2B"], url: "https://www.tumercadoperu.com", icon: "ph-storefront" },
+            { id: "t6", cat: "Nacional (Perú)", name: "SERFOR", desc: "Estadísticas sobre hierbas, flora, fauna silvestre y productos forestales.", tags: ["Madera", "Flora"], url: "https://sniffs.serfor.gob.pe", icon: "ph-tree" },
+            { id: "t7", cat: "Nacional (Perú)", name: "ADT (ADEX)", desc: "Importaciones y exportaciones peruanas detalladas por puerto y aduana.", tags: ["ADEX", "Puertos"], url: "https://www.adexdatatrade.com", icon: "ph-chart-line-up" },
+            { id: "t8", cat: "Nacional (Perú)", name: "Veritrade", desc: "Inteligencia comercial y búsqueda directa de empresas importadoras reales.", tags: ["Competencia", "Importadores"], url: "https://www.veritradecorp.com", icon: "ph-detective" },
+            { id: "t9", cat: "Nacional (Perú)", name: "Acuerdos Comerciales", desc: "Portal oficial de los TLCs y acuerdos comerciales vigentes del Perú.", tags: ["TLC", "Convenios"], url: "https://www.acuerdoscomerciales.gob.pe", icon: "ph-handshake" },
+            { id: "t10", cat: "Nacional (Perú)", name: "Tu Mercado Perú", desc: "Directorio de PROMPERÚ que conecta oferta regional con compradores globales.", tags: ["PromPerú", "B2B"], url: "https://www.tumercadoperu.com", icon: "ph-storefront" },
             
-            // 2. Riesgo y Entorno
             { id: "t11", cat: "Riesgo y Entorno", name: "EPI Yale", desc: "Índice de Desempeño Ambiental. Evalúa la sostenibilidad ecológica por país.", tags: ["Medio Ambiente", "EPI"], url: "https://epi.yale.edu/measure/2024/EPI", icon: "ph-leaf" },
-            { id: "t12", cat: "Riesgo y Entorno", name: "Transparency Int.", desc: "Índice de Percepción de la Corrupción (CPI). Mide riesgo ético institucional.", tags: ["Corrupción", "Ética"], url: "https://www.transparency.org/en/cpi/2025", icon: "ph-scales" },
-            { id: "t13", cat: "Riesgo y Entorno", name: "Doing Business", desc: "Ranking histórico sobre facilidad para hacer negocios y obtención de permisos.", tags: ["Trámites", "BM"], url: "https://archive.doingbusiness.org/es/rankings", icon: "ph-briefcase" },
-            { id: "t14", cat: "Riesgo y Entorno", name: "COFACE", desc: "Análisis macroeconómico y mapas de evaluación de riesgo país a nivel mundial.", tags: ["Riesgo País", "Impago"], url: "https://www.coface.com.pe", icon: "ph-warning-circle" },
-            { id: "t15", cat: "Riesgo y Entorno", name: "CESCE", desc: "Gestión de seguros de crédito a la exportación e información de riesgo.", tags: ["Seguros", "Pólizas"], url: "https://www.cesce.es", icon: "ph-shield-check" },
-            { id: "t16", cat: "Riesgo y Entorno", name: "CIAL D&B", desc: "Software para evaluar solvencia y riesgo de crédito en transacciones B2B.", tags: ["Solvencia", "D&B"], url: "https://www.cialdnb.com", icon: "ph-bank" },
+            { id: "t12", cat: "Riesgo y Entorno", name: "Transparency Int.", desc: "Índice de Percepción de la Corrupción. Mide riesgo ético institucional.", tags: ["Corrupción", "Ética"], url: "https://www.transparency.org/en/cpi/2025", icon: "ph-scales" },
+            { id: "t13", cat: "Riesgo y Entorno", name: "Doing Business", desc: "Ranking del Banco Mundial sobre facilidad de negocios y regulaciones.", tags: ["Trámites", "Inversión"], url: "https://archive.doingbusiness.org/es/rankings", icon: "ph-briefcase" },
+            { id: "t14", cat: "Riesgo y Entorno", name: "COFACE", desc: "Análisis macroeconómico, insights y mapas de evaluación de riesgo país.", tags: ["Riesgo País", "Impago"], url: "https://www.coface.com.pe", icon: "ph-warning-circle" },
+            { id: "t15", cat: "Riesgo y Entorno", name: "CESCE", desc: "Gestión de seguros de crédito a la exportación e información de riesgo.", tags: ["Seguros", "Crédito"], url: "https://www.cesce.es", icon: "ph-shield-check" },
+            { id: "t16", cat: "Riesgo y Entorno", name: "CIAL D&B", desc: "Software financiero para evaluar solvencia y riesgo en transacciones B2B.", tags: ["Solvencia", "D&B"], url: "https://www.cialdnb.com", icon: "ph-bank" },
 
-            // 3. Mercado y Estadísticas
-            { id: "t17", cat: "Mercado y Estadísticas", name: "Trade Map", desc: "Filtra importaciones y exportaciones a nivel mundial por partida arancelaria.", tags: ["Flujos globales", "ITC"], url: "https://www.trademap.org", icon: "ph-globe-hemisphere-east" },
-            { id: "t18", cat: "Mercado y Estadísticas", name: "FAO STAT", desc: "Data estadística mundial sobre agricultura, alimentos y ganadería.", tags: ["FAO", "Alimentos"], url: "https://www.fao.org/faostat/", icon: "ph-wheat" },
-            { id: "t19", cat: "Mercado y Estadísticas", name: "CIA Factbook", desc: "Indicadores geográficos, demográficos, económicos y ambientales por país.", tags: ["CIA", "Perfil país"], url: "https://www.cia.gov/the-world-factbook/", icon: "ph-book-open" },
-            { id: "t20", cat: "Mercado y Estadísticas", name: "Euromonitor", desc: "Inteligencia sobre tendencias de consumo, mercado retail y competencia.", tags: ["Tendencias", "Retail"], url: "https://www.euromonitor.com", icon: "ph-trend-up" },
-            { id: "t21", cat: "Mercado y Estadísticas", name: "AUMA Ferias", desc: "Buscador de ferias internacionales con un enfoque técnico e industrial.", tags: ["Ferias", "Alemania"], url: "https://www.auma.de/en", icon: "ph-ticket" },
-            { id: "t22", cat: "Mercado y Estadísticas", name: "nFerias", desc: "Directorio global de exposiciones, congresos y eventos comerciales.", tags: ["Ferias", "Eventos"], url: "https://www.nferias.com", icon: "ph-presentation-chart" },
-            { id: "t23", cat: "Mercado y Estadísticas", name: "INEI Mundial", desc: "Directorio del estado peruano con institutos de estadística de 195 países.", tags: ["Censos", "Directorio"], url: "https://www.gob.pe/14796", icon: "ph-list-numbers" },
+            { id: "t17", cat: "Mercado y Estadísticas", name: "Trade Map", desc: "Filtra flujos de importación y exportación a nivel mundial por partida.", tags: ["Flujos", "Competencia"], url: "https://www.trademap.org", icon: "ph-globe-hemisphere-east" },
+            { id: "t18", cat: "Mercado y Estadísticas", name: "FAO STAT", desc: "Data estadística global sobre agricultura, producción de alimentos y ganadería.", tags: ["FAO", "Alimentos"], url: "https://www.fao.org/faostat/", icon: "ph-wheat" },
+            { id: "t19", cat: "Mercado y Estadísticas", name: "CIA Factbook", desc: "Indicadores geográficos, económicos, demográficos y ambientales por país.", tags: ["CIA", "Perfil país"], url: "https://www.cia.gov/the-world-factbook/", icon: "ph-book-open" },
+            { id: "t20", cat: "Mercado y Estadísticas", name: "Euromonitor", desc: "Inteligencia sobre tendencias de mercado, consumo y análisis de competencia.", tags: ["Tendencias", "Retail"], url: "https://www.euromonitor.com", icon: "ph-trend-up" },
+            { id: "t21", cat: "Mercado y Estadísticas", name: "AUMA Ferias", desc: "Buscador de ferias internacionales con un enfoque técnico y calidad alemana.", tags: ["Ferias", "Eventos"], url: "https://www.auma.de/en", icon: "ph-ticket" },
+            { id: "t22", cat: "Mercado y Estadísticas", name: "nFerias", desc: "Directorio global comercial de exposiciones, congresos y convenciones.", tags: ["Exposiciones", "B2B"], url: "https://www.nferias.com", icon: "ph-presentation-chart" },
+            { id: "t23", cat: "Mercado y Estadísticas", name: "INEI Mundial", desc: "Directorio oficial con enlaces a los institutos de estadística de 195 países.", tags: ["Censos", "Directorio"], url: "https://www.gob.pe/14796", icon: "ph-list-numbers" },
 
-            // 4. Logística y Tránsito
-            { id: "t24", cat: "Logística y Tránsito", name: "LPI (Banco Mundial)", desc: "Índice de Desempeño Logístico. Evalúa aduanas e infraestructura por país.", tags: ["LPI", "Aduanas"], url: "https://lpi.worldbank.org/international/global", icon: "ph-truck" },
-            { id: "t25", cat: "Logística y Tránsito", name: "Rutas Marítimas", desc: "Líneas navieras, rutas y tiempos de tránsito marítimo (PromPerú).", tags: ["Fletes", "Navieras"], url: "https://rutasmaritimas.promperu.gob.pe/", icon: "ph-boat" },
-            { id: "t26", cat: "Logística y Tránsito", name: "SeaRates", desc: "Buscador de fletes globales, distancias y rastreo de contenedores.", tags: ["Tracking", "Rutas"], url: "https://www.searates.com/", icon: "ph-map-pin-line" },
+            { id: "t24", cat: "Logística y Tránsito", name: "LPI (Banco Mundial)", desc: "Índice de Desempeño Logístico. Evalúa aduanas, envíos e infraestructura.", tags: ["LPI", "Aduanas"], url: "https://lpi.worldbank.org/international/global", icon: "ph-truck" },
+            { id: "t25", cat: "Logística y Tránsito", name: "Rutas Marítimas", desc: "Calcula líneas navieras, rutas directas y tiempos de tránsito (PromPerú).", tags: ["Fletes", "Navieras"], url: "https://rutasmaritimas.promperu.gob.pe/", icon: "ph-boat" },
+            { id: "t26", cat: "Logística y Tránsito", name: "SeaRates", desc: "Buscador de fletes globales, distancias y rastreo de contenedores en vivo.", tags: ["Tracking", "Rutas"], url: "https://www.searates.com/", icon: "ph-map-pin-line" },
 
-            // 5. Barreras y Aranceles
-            { id: "t27", cat: "Barreras y Aranceles", name: "Access2Markets", desc: "Aranceles, impuestos y requisitos estrictos de ingreso a la Unión Europea.", tags: ["UE", "Aranceles"], url: "https://trade.ec.europa.eu/", icon: "ph-file-text" },
-            { id: "t28", cat: "Barreras y Aranceles", name: "USITC (DataWeb)", desc: "Sistema para revisar el Arancel de EE.UU. (HTS) y sus estadísticas.", tags: ["HTS", "USA"], url: "https://dataweb.usitc.gov", icon: "ph-flag-banner" },
-            { id: "t29", cat: "Barreras y Aranceles", name: "MACMAP", desc: "Identifica barreras arancelarias y no arancelarias para ingresar a un mercado.", tags: ["Barreras", "ITC"], url: "https://www.macmap.org", icon: "ph-wall" },
-            { id: "t30", cat: "Barreras y Aranceles", name: "Standards Map", desc: "Base de datos sobre certificaciones voluntarias y normas sostenibles (ESG).", tags: ["Certificaciones", "ISO"], url: "https://www.standardsmap.org", icon: "ph-seal-check" },
+            { id: "t27", cat: "Barreras y Aranceles", name: "Access2Markets", desc: "Calcula aranceles, impuestos y requisitos para ingresar a la Unión Europea.", tags: ["UE", "Aranceles"], url: "https://trade.ec.europa.eu/", icon: "ph-file-text" },
+            { id: "t28", cat: "Barreras y Aranceles", name: "USITC (DataWeb)", desc: "Sistema oficial para revisar el Arancel de EE.UU. (HTS) y estadísticas.", tags: ["HTS", "USA"], url: "https://dataweb.usitc.gov", icon: "ph-flag-banner" },
+            { id: "t29", cat: "Barreras y Aranceles", name: "MACMAP", desc: "Herramienta ITC para identificar barreras arancelarias y no arancelarias.", tags: ["Barreras", "Restricciones"], url: "https://www.macmap.org", icon: "ph-wall" },
+            { id: "t30", cat: "Barreras y Aranceles", name: "Standards Map", desc: "Base de datos internacional de certificaciones voluntarias y normas ESG.", tags: ["Certificaciones", "ISO"], url: "https://www.standardsmap.org", icon: "ph-seal-check" },
 
-            // 6. Regionales y Promoción
-            { id: "t31", cat: "Fuentes Regionales", name: "Exportemos.pe", desc: "Información e inteligencia comercial para las Américas (PromPerú).", tags: ["PromPerú", "LATAM"], url: "https://exportemos.pe", icon: "ph-compass" },
-            { id: "t32", cat: "Fuentes Regionales", name: "Eurostat", desc: "Datos macroeconómicos y sociales oficiales de la Unión Europea.", tags: ["UE", "Estadísticas"], url: "https://ec.europa.eu/eurostat", icon: "ph-chart-pie-slice" },
-            { id: "t33", cat: "Fuentes Regionales", name: "CBI Europe", desc: "Investigación de mercado para promover exportaciones hacia Europa.", tags: ["Europa", "Tendencias"], url: "https://www.cbi.eu", icon: "ph-lightbulb" },
-            { id: "t34", cat: "Fuentes Regionales", name: "US Census Bureau", desc: "Datos fundamentales sobre la demografía y economía de Estados Unidos.", tags: ["USA", "Censo"], url: "https://www.census.gov", icon: "ph-users" },
-            { id: "t35", cat: "Fuentes Regionales", name: "PROCOMER", desc: "Promotora del Comercio Exterior de Costa Rica. Inteligencia en Centroamérica.", tags: ["Costa Rica", "Promo"], url: "https://www.procomer.com", icon: "ph-megaphone" },
-            { id: "t36", cat: "Fuentes Regionales", name: "ICEX España", desc: "Entidad pública que promueve la exportación en el mercado ibérico.", tags: ["España", "Inversión"], url: "https://www.icex.es", icon: "ph-push-pin" },
-            { id: "t37", cat: "Fuentes Regionales", name: "APEX Brasil", desc: "Agencia de Promoción de Exportaciones e Inversiones de Brasil.", tags: ["Brasil", "Inversión"], url: "https://www.apexbrasil.com.br", icon: "ph-star-four" }
+            { id: "t31", cat: "Fuentes Regionales", name: "Exportemos.pe", desc: "Inteligencia comercial elaborada por PromPerú para las Américas.", tags: ["PromPerú", "LATAM"], url: "https://exportemos.pe", icon: "ph-compass" },
+            { id: "t32", cat: "Fuentes Regionales", name: "Eurostat", desc: "Base de datos macroeconómicos y sociales oficiales de la Unión Europea.", tags: ["UE", "Estadísticas"], url: "https://ec.europa.eu/eurostat", icon: "ph-chart-pie-slice" },
+            { id: "t33", cat: "Fuentes Regionales", name: "CBI Europe", desc: "Investigación de mercado especializada para exportar hacia Europa.", tags: ["Europa", "Tendencias"], url: "https://www.cbi.eu", icon: "ph-lightbulb" },
+            { id: "t34", cat: "Fuentes Regionales", name: "US Census Bureau", desc: "Datos oficiales sobre la economía y demografía de los Estados Unidos.", tags: ["USA", "Censo"], url: "https://www.census.gov", icon: "ph-users" },
+            { id: "t35", cat: "Fuentes Regionales", name: "PROCOMER", desc: "Promotora del Comercio Exterior de Costa Rica para el mercado centroamericano.", tags: ["Costa Rica", "Promo"], url: "https://www.procomer.com", icon: "ph-megaphone" },
+            { id: "t36", cat: "Fuentes Regionales", name: "ICEX España", desc: "Entidad pública que promueve la exportación en el mercado español.", tags: ["España", "Inversión"], url: "https://www.icex.es", icon: "ph-push-pin" },
+            { id: "t37", cat: "Fuentes Regionales", name: "APEX Brasil", desc: "Agencia de Promoción de Exportaciones e Inversiones de Brasil.", tags: ["Brasil", "Mercado"], url: "https://www.apexbrasil.com.br", icon: "ph-star-four" }
         ];
 
-        // --- MANEJO DE ESTADO ---
+        // 2. ESTADO
         let state = {
             view: 'all', 
             category: 'Todas',
             search: '',
-            favorites: JSON.parse(localStorage.getItem('adexFavs_EricMozombite')) || []
+            favorites: JSON.parse(localStorage.getItem('adexFavs_EricMozombite_v2')) || []
         };
 
-        // Extraer categorías únicas de la data
         const categories = ["Todas", "Nacional (Perú)", "Riesgo y Entorno", "Mercado y Estadísticas", "Logística y Tránsito", "Barreras y Aranceles", "Fuentes Regionales"];
 
-        const grid = document.getElementById('tools-grid');
-        
-        // Sincronizar buscadores de Desktop y Mobile
-        document.getElementById('search-desktop').addEventListener('input', handleSearch);
-        document.getElementById('search-mobile').addEventListener('input', handleSearch);
-
-        function handleSearch(e) {
+        // 3. INICIALIZACIÓN
+        document.getElementById('search-input').addEventListener('input', e => {
             state.search = e.target.value.toLowerCase();
-            document.getElementById('search-desktop').value = e.target.value;
-            document.getElementById('search-mobile').value = e.target.value;
             renderCards();
-        }
+        });
 
-        // --- INICIALIZACIÓN ---
         function init() {
             renderCategories();
             updateFavIndicators();
             renderCards();
         }
 
-        // --- RENDERIZAR CATEGORÍAS (Píldoras) ---
+        // 4. CATEGORÍAS (Píldoras Superiores)
         function renderCategories() {
             const nav = document.getElementById('category-nav');
             nav.innerHTML = '';
-
             categories.forEach(cat => {
                 const btn = document.createElement('button');
-                btn.className = `whitespace-nowrap px-5 py-2 rounded-full text-[13px] font-bold transition-all border ${cat === 'Todas' ? 'bg-adex-darkBlue text-white border-adex-darkBlue shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300'}`;
                 btn.id = `cat-${cat.replace(/\s+/g, '-').replace(/[()\/]/g, '')}`;
                 btn.onclick = () => setCategory(cat);
                 btn.textContent = cat;
+                
+                if (cat === 'Todas') {
+                    btn.className = "whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-adex-darkBlue text-white shadow-md";
+                } else {
+                    btn.className = "whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-semibold transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-50";
+                }
                 nav.appendChild(btn);
             });
         }
 
-        // --- CAMBIO DE VISTAS (Directorio vs Favoritos) ---
-        function changeView(viewType) {
-            state.view = viewType;
-            state.category = 'Todas'; 
-            state.search = ''; 
-            document.getElementById('search-desktop').value = '';
-            document.getElementById('search-mobile').value = '';
-            
-            // Actualizar Textos
-            document.getElementById('view-title').textContent = viewType === 'all' ? "Directorio Completo" : "Mis Favoritos";
-            document.getElementById('view-desc').textContent = viewType === 'all' ? "Toca cualquier tarjeta para ingresar directamente." : "Herramientas que utilizas con mayor frecuencia.";
-
-            // Estilos del Botón de Navegación Inferior
-            document.getElementById('nav-btn-all').className = viewType === 'all' ? "flex flex-col items-center justify-center w-20 py-1 text-adex-blue font-bold transition-all transform hover:scale-105" : "flex flex-col items-center justify-center w-20 py-1 text-slate-400 hover:text-slate-600 font-medium transition-all";
-            document.getElementById('nav-btn-fav').className = viewType === 'favorites' ? "flex flex-col items-center justify-center w-20 py-1 text-yellow-500 font-bold transition-all transform hover:scale-105 relative" : "flex flex-col items-center justify-center w-20 py-1 text-slate-400 hover:text-yellow-500 font-medium transition-all relative";
-            document.getElementById('nav-star-icon').className = viewType === 'favorites' ? "ph-fill ph-star text-3xl mb-1 text-yellow-500 drop-shadow-sm transition-colors" : "ph-bold ph-star text-3xl mb-1 transition-colors";
-
-            updateCategoryButtons('Todas');
-            renderCards();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // --- FILTRADO POR CATEGORÍA ---
         function setCategory(cat) {
             if(state.view === 'favorites') changeView('all'); 
             state.category = cat;
             
             document.getElementById('view-title').textContent = cat === "Todas" ? "Directorio Completo" : cat;
-            document.getElementById('view-desc').textContent = cat === "Todas" ? "Toca cualquier tarjeta para ingresar directamente." : `Explorando las herramientas de ${cat}.`;
+            document.getElementById('view-desc').textContent = cat === "Todas" ? "Toca cualquier tarjeta para abrirla." : `Mostrando herramientas de ${cat}.`;
 
-            updateCategoryButtons(cat);
-            renderCards();
-        }
-
-        function updateCategoryButtons(cat) {
             categories.forEach(c => {
                 const btn = document.getElementById(`cat-${c.replace(/\s+/g, '-').replace(/[()\/]/g, '')}`);
                 if (c === cat) {
-                    btn.className = "whitespace-nowrap px-5 py-2 rounded-full text-[13px] font-bold transition-all border bg-adex-darkBlue text-white border-adex-darkBlue shadow-md";
+                    btn.className = "whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-bold transition-all bg-adex-darkBlue text-white shadow-md";
                 } else {
-                    btn.className = "whitespace-nowrap px-5 py-2 rounded-full text-[13px] font-bold transition-all border bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:border-slate-300";
+                    btn.className = "whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-semibold transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-50";
                 }
             });
+            renderCards();
         }
 
-        // --- LÓGICA DE ESTRELLA (FAVORITOS) ---
+        // 5. CAMBIO DE VISTAS (Directorio / Favoritos)
+        function changeView(viewType) {
+            state.view = viewType;
+            state.category = 'Todas';
+            state.search = '';
+            document.getElementById('search-input').value = '';
+            
+            document.getElementById('view-title').textContent = viewType === 'all' ? "Directorio Completo" : "Mis Favoritos";
+            document.getElementById('view-desc').textContent = viewType === 'all' ? "Toca cualquier tarjeta para abrirla." : "Tus herramientas guardadas.";
+
+            // Animación del indicador del Bottom Nav
+            const indicator = document.getElementById('nav-indicator');
+            if (viewType === 'all') {
+                indicator.style.transform = 'translateX(0)';
+                document.getElementById('nav-btn-all').classList.replace('text-slate-400', 'text-adex-blue');
+                document.getElementById('icon-all').classList.replace('ph-bold', 'ph-fill');
+                
+                document.getElementById('nav-btn-fav').classList.replace('text-yellow-500', 'text-slate-400');
+                document.getElementById('icon-fav').classList.replace('ph-fill', 'ph-bold');
+            } else {
+                indicator.style.transform = 'translateX(100%)';
+                document.getElementById('nav-btn-fav').classList.replace('text-slate-400', 'text-yellow-500');
+                document.getElementById('icon-fav').classList.replace('ph-bold', 'ph-fill');
+                
+                document.getElementById('nav-btn-all').classList.replace('text-adex-blue', 'text-slate-400');
+                document.getElementById('icon-all').classList.replace('ph-fill', 'ph-bold');
+            }
+
+            setCategory('Todas'); // Resetea las píldoras
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 6. LÓGICA DE FAVORITOS (Estrellas)
         function toggleFavorite(id, event) {
-            // Evita que el clic en la estrella abra la URL de la tarjeta
-            event.preventDefault(); 
-            event.stopPropagation(); 
+            event.preventDefault(); // Evita abrir el link
+            event.stopPropagation(); // Evita que el clic suba al contenedor
             
             const index = state.favorites.indexOf(id);
             const iconEl = document.getElementById(`star-icon-${id}`);
 
             if (index > -1) {
-                // Quitar de favoritos (Desmarcar estrella)
+                // Quitar
                 state.favorites.splice(index, 1);
-                iconEl.className = "ph-bold ph-star text-[28px] text-slate-300 group-hover:text-yellow-400 transition-colors";
+                iconEl.className = "ph-bold ph-star text-3xl text-slate-300 transition-colors";
             } else {
-                // Agregar a favoritos (Estrella amarilla)
+                // Agregar
                 state.favorites.push(id);
-                iconEl.className = "ph-fill ph-star text-[28px] text-yellow-400 drop-shadow-md";
-                // Añadir animación de Pop
-                iconEl.parentElement.classList.add('star-animated');
-                setTimeout(() => iconEl.parentElement.classList.remove('star-animated'), 400); 
+                iconEl.className = "ph-fill ph-star text-3xl text-yellow-400 drop-shadow-md";
+                
+                // Animación
+                const btn = iconEl.parentElement;
+                btn.classList.add('star-animated');
+                setTimeout(() => btn.classList.remove('star-animated'), 500); 
             }
             
-            // Guardar en el almacenamiento local del navegador
-            localStorage.setItem('adexFavs_EricMozombite', JSON.stringify(state.favorites));
+            localStorage.setItem('adexFavs_EricMozombite_v2', JSON.stringify(state.favorites));
             updateFavIndicators();
             
-            // Si estoy en la vista de favoritos y desmarco una, redibujar tras un breve momento
             if (state.view === 'favorites') {
                 setTimeout(renderCards, 300);
             }
@@ -426,22 +415,17 @@
 
         function updateFavIndicators() {
             const count = state.favorites.length;
-            const mobCounter = document.getElementById('nav-fav-counter');
-            
-            mobCounter.textContent = count;
-            if (count > 0) {
-                mobCounter.classList.remove('hidden');
-            } else {
-                mobCounter.classList.add('hidden');
-            }
+            const badge = document.getElementById('fav-badge');
+            badge.textContent = count;
+            count > 0 ? badge.classList.remove('hidden') : badge.classList.add('hidden');
         }
 
-        // --- RENDERIZADO DE LAS FICHAS (TARJETAS) ---
+        // 7. RENDERIZADO DE FICHAS (Tarjetas Interactivas)
         function renderCards() {
-            grid.innerHTML = '';
+            const grid = document.getElementById('tools-grid');
             const emptyState = document.getElementById('empty-state');
+            grid.innerHTML = '';
             
-            // Aplicar filtros
             const filteredData = toolsData.filter(tool => {
                 if (state.view === 'favorites' && !state.favorites.includes(tool.id)) return false;
                 if (state.view === 'all' && state.category !== 'Todas' && tool.cat !== state.category) return false;
@@ -454,7 +438,6 @@
 
             document.getElementById('results-count').textContent = `${filteredData.length} herramientas`;
 
-            // Si no hay resultados
             if (filteredData.length === 0) {
                 grid.classList.add('hidden');
                 emptyState.classList.remove('hidden');
@@ -462,56 +445,50 @@
                 
                 if (state.view === 'favorites') {
                     document.getElementById('empty-icon').className = "ph-fill ph-star text-yellow-400 text-6xl drop-shadow-lg";
-                    document.getElementById('empty-title').textContent = "Tu lista está vacía";
-                    document.getElementById('empty-desc').textContent = "Toca la estrella en cualquier herramienta para guardarla aquí y acceder más rápido.";
+                    document.getElementById('empty-title').textContent = "Lista vacía";
+                    document.getElementById('empty-desc').textContent = "Toca la estrella en cualquier ficha para guardarla aquí.";
                 } else {
                     document.getElementById('empty-icon').className = "ph-duotone ph-magnifying-glass-minus text-slate-300 text-6xl";
-                    document.getElementById('empty-title').textContent = "No hay coincidencias";
-                    document.getElementById('empty-desc').textContent = "Intenta buscar con otra palabra clave como 'Aduanas' o 'Aranceles'.";
+                    document.getElementById('empty-title').textContent = "Sin resultados";
+                    document.getElementById('empty-desc').textContent = "Intenta usar otra palabra clave en el buscador.";
                 }
                 return;
             }
 
-            // Mostrar grilla
             grid.classList.remove('hidden');
             emptyState.classList.add('hidden');
             emptyState.classList.remove('flex');
 
-            // Crear y añadir tarjetas
             filteredData.forEach((tool, i) => {
                 const isFav = state.favorites.includes(tool.id);
-                // Si es favorito, estrella amarilla rellena. Si no, contorno gris.
-                const starIcon = isFav ? "ph-fill ph-star text-[28px] text-yellow-400 drop-shadow-md" : "ph-bold ph-star text-[28px] text-slate-300 group-hover:text-yellow-400 transition-colors";
+                const starIcon = isFav ? "ph-fill ph-star text-3xl text-yellow-400 drop-shadow-md" : "ph-bold ph-star text-3xl text-slate-300 hover:text-yellow-400 transition-colors";
 
                 const card = document.createElement('div');
-                // Toda la tarjeta es un gran botón.
+                // Al tocar CUALQUIER PARTE de la tarjeta se abre el enlace (excepto la estrella)
                 card.onclick = () => window.open(tool.url, '_blank');
-                card.className = "card-app bg-white rounded-3xl p-5 border border-slate-200 shadow-card cursor-pointer flex flex-col h-full relative group animate-fade-in";
-                card.style.animationDelay = `${i * 0.03}s`; // Efecto cascada
+                card.className = "tool-card bg-white rounded-3xl p-6 border border-slate-200 shadow-card cursor-pointer flex flex-col h-full relative group animate-enter";
+                card.style.animationDelay = `${i * 0.04}s`; 
                 
                 card.innerHTML = `
-                    <!-- Botón Estrella (Absoluto, con stopPropagation en el onClick) -->
-                    <button onclick="toggleFavorite('${tool.id}', event)" class="star-btn absolute top-4 right-4 p-2 rounded-full z-20" aria-label="Marcar Favorito">
+                    <!-- Botón Estrella Independiente -->
+                    <button onclick="toggleFavorite('${tool.id}', event)" class="star-btn absolute top-5 right-5 z-20" aria-label="Favorito">
                         <i id="star-icon-${tool.id}" class="${starIcon}"></i>
                     </button>
 
-                    <!-- Icono Principal de la Herramienta -->
-                    <div class="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-adex-blue shadow-inner mb-4">
-                        <i class="ph-duotone ${tool.icon} text-3xl"></i>
+                    <!-- Icono -->
+                    <div class="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-adex-blue mb-5 group-hover:bg-adex-blue group-hover:text-white transition-colors duration-300">
+                        <i class="ph-duotone ${tool.icon} text-4xl"></i>
                     </div>
                     
                     <!-- Textos -->
-                    <span class="text-[10px] font-black uppercase tracking-widest text-adex-red mb-1">${tool.cat}</span>
-                    <h3 class="text-lg lg:text-xl font-black text-slate-900 mb-2 leading-tight">${tool.name}</h3>
-                    <p class="text-sm text-slate-500 font-medium leading-relaxed flex-grow pr-2">${tool.desc}</p>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-adex-red mb-1.5">${tool.cat}</span>
+                    <h3 class="text-xl font-black text-slate-900 mb-2 leading-tight">${tool.name}</h3>
+                    <p class="text-sm text-slate-500 font-medium leading-relaxed flex-grow pr-4">${tool.desc}</p>
                     
-                    <!-- Footer: Etiquetas (Tags) y Flecha de salida -->
-                    <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
-                        <div class="flex flex-wrap gap-1.5">
-                            ${tool.tags.map(tag => `<span class="bg-slate-50 text-slate-500 text-[10px] font-bold px-2 py-1 rounded-md border border-slate-200/60">${tag}</span>`).join('')}
-                        </div>
-                        <div class="w-8 h-8 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-adex-blue group-hover:border-adex-blue group-hover:text-white transition-all shadow-sm shrink-0 ml-2">
-                            <i class="ph-bold ph-arrow-up-right group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
+                    <!-- Footer: Etiquetas -->
+                    <div class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between">
+                        <div class="flex flex-wrap gap-2">
+                            ${tool.tags.map(tag => `<span class="bg-slate-50 text-slate-500 text-[10px] font-bold px-2.5 py-1.5 rounded-lg border border-slate-200">${tag}</span>`).join('')}
                         </div>
                     </div>
                 `;
@@ -520,7 +497,6 @@
             });
         }
 
-        // Iniciar
         init();
     </script>
 </body>
