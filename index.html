@@ -2,810 +2,533 @@
 <html lang="es-PE">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estrategia Materia Prima y KPIs: Quinua 2026 - ADEX</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Inteligencia Comercial | ADEX Escuela</title>
+    
+    <!-- Favicon de ADEX -->
+    <link rel="icon" href="https://www.adex.edu.pe/wp-content/uploads/2020/01/favicon.png" sizes="32x32" />
+    
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;700&family=Azeret+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        adex: {
+                            blue: '#003399',
+                            darkBlue: '#001a4d',
+                            red: '#cc0000',
+                            gray: '#f8fafc'
+                        }
+                    },
+                    boxShadow: {
+                        'nav': '0 -4px 20px rgba(0,0,0,0.08)',
+                        'card': '0 4px 15px rgba(0, 0, 0, 0.04)',
+                        'card-hover': '0 12px 25px rgba(0, 51, 153, 0.12)'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
     <style>
-        /* --- VARIABLES CORPORATIVAS ADEX --- */
-        :root {
-            --primary: #3E2723; /* Marrón oscuro (Tierra/Agro) */
-            --accent: #D4AF37; /* Dorado (Grano de Oro) */
-            --success: #2E7D32; /* Verde (Orgánico/Finanzas) */
-            --info: #1565C0; /* Azul (Estrategia) */
-            --danger: #C62828; /* Rojo (Fricciones/Riesgos) */
-            --bg-light: #f4f6f8;
-            --bg-card: #FFFFFF;
-            --text-dark: #212121;
-            --text-muted: #616161;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
         body { 
-            background-color: #1a1a1a; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden; /* Evita cualquier scroll en la página */
-            font-family: 'Arimo', sans-serif; 
-            color: var(--text-dark);
-        }
-
-        /* --- CONTENEDOR PRINCIPAL (16:9 Aspect Ratio) --- */
-        #presentation-area {
-            position: relative;
-            width: 100%;
-            max-width: 1280px;
-            aspect-ratio: 16 / 9;
-            background-color: var(--bg-card);
-            border-radius: 16px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            overflow: hidden;
-        }
-
-        /* --- CONTENEDOR DE DIAPOSITIVA --- */
-        .slide-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            padding: 40px 70px;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease-in-out, visibility 0.5s;
-            background-color: var(--bg-card);
-            z-index: 1;
-        }
-
-        .slide-container.active {
-            opacity: 1;
-            visibility: visible;
-            z-index: 10;
-        }
-
-        /* Banner Superior ADEX */
-        .slide-container::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 12px;
-            background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 50%, var(--success) 100%);
+            background-color: #f0f4f8; 
+            -webkit-tap-highlight-color: transparent;
         }
         
-        .footer-text { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); font-size: 13px; color: #999; font-family: 'Azeret Mono', monospace; }
-        .adex-logo { position: absolute; bottom: 25px; left: 70px; font-weight: 700; color: var(--primary); font-size: 16px; letter-spacing: 1px; }
-
-        /* --- CONTROLES DE NAVEGACIÓN DISCRETOS --- */
-        .nav-controls {
-            position: absolute;
-            bottom: 20px;
-            right: 40px;
-            display: flex;
-            gap: 15px;
-            z-index: 100; /* Siempre encima de las diapositivas */
-        }
-
-        .btn-nav {
-            background: rgba(255, 255, 255, 0.8);
-            color: var(--primary);
-            border: 1px solid var(--accent);
-            padding: 8px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-family: 'Azeret Mono', monospace;
-            font-size: 14px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-nav:hover {
-            background: var(--accent);
-            color: #FFF;
-            transform: translateY(-2px);
-        }
-
-        /* --- TIPOGRAFÍA --- */
-        h1, h2, h3, h4 { color: var(--primary); font-weight: 700; margin: 0; }
-        h2.slide-title {
-            font-size: 34px; margin-bottom: 20px; width: 100%; text-align: left;
-            border-bottom: 2px solid #EEE; padding-bottom: 10px;
-            display: flex; justify-content: space-between; align-items: center;
-            flex-shrink: 0;
-        }
-        .slide-title span {
-            font-size: 14px; background: #FFF8E7; color: var(--accent); padding: 6px 18px; border-radius: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-        }
-        p, li { font-size: 16px; line-height: 1.5; }
-
-        /* --- LAYOUTS --- */
-        .content-area { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; flex-grow: 1; overflow: hidden;}
-        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; height: 100%; align-items: center; }
-        .three-column { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; height: 100%; align-items: stretch; }
-
-        /* --- TARJETAS UI --- */
-        .info-card {
-            background: #FAFAFA; border: 1px solid #E0E0E0; border-radius: 12px; padding: 20px;
-            display: flex; flex-direction: column; justify-content: flex-start;
-        }
-        .info-card h3 { color: var(--success); font-size: 20px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        .img-placeholder {
-            width: 100%;
-            height: 100%;
-            min-height: 350px;
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-family: 'Azeret Mono', monospace;
-            font-size: 16px;
-            text-align: center;
-            padding: 30px;
-            border: 2px dashed var(--accent);
-            border-radius: 15px;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+        .tool-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        /* --- CUSTOMER JOURNEY MAP --- */
-        .journey-stage { background: #fff; border-radius: 15px; padding: 25px; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #eee; height: 100%; display: flex; flex-direction: column; justify-content: center;}
-        .journey-icon { font-size: 50px; position: absolute; right: 25px; top: 25px; opacity: 0.1; }
-        .touchpoints { margin-top: 15px; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: bold; }
-        .theory-box { background: #FFF8E7; border-left: 5px solid var(--accent); padding: 12px; margin-bottom: 15px; border-radius: 8px; font-size: 14px; }
-
-        /* --- SIMULADOR EDUCATIVO --- */
-        .sim-grid { display: grid; grid-template-columns: 35% 65%; gap: 30px; height: 100%; align-items: stretch;}
-        .sim-panel { background: #FAFAFA; border: 1px solid #E0E0E0; border-radius: 15px; padding: 25px; display: flex; flex-direction: column; overflow-y: auto;}
-        .sim-panel h3 { margin-bottom: 15px; font-size: 20px; border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
         
-        .input-group { margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .input-group label { font-size: 13px; color: #555; font-weight: bold; }
-        .input-group input { 
-            width: 90px; padding: 6px; border: 1px solid #CCC; border-radius: 6px; 
-            font-size: 14px; font-family: 'Azeret Mono', monospace; text-align: right;
+        .star-btn {
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .star-btn:active {
+            transform: scale(0.6);
+        }
+        @keyframes starPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
+        }
+        .star-animated {
+            animation: starPop 0.4s ease-out;
         }
 
-        .kpi-board { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        .kpi-box { background: #FFF; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-top: 4px solid var(--primary); }
-        .kpi-box.blue { border-top-color: var(--info); }
-        .kpi-box.green { border-top-color: var(--success); }
-        .kpi-box.gold { border-top-color: var(--accent); }
-        .kpi-title { font-size: 11px; color: #777; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
-        .kpi-value { font-size: 24px; font-weight: bold; color: var(--primary); font-family: 'Azeret Mono', monospace; }
-
-        .edu-panel { background: #E3F2FD; border: 1px solid #90CAF9; border-radius: 10px; padding: 15px; margin-top: auto; display: flex; gap: 15px; align-items: flex-start; }
-        .highlight { color: var(--accent); font-weight: bold; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        /* Safe area for mobile bottom nav */
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
     </style>
 </head>
-<body>
+<body class="text-slate-800 antialiased h-screen flex overflow-hidden">
 
-    <!-- CONTENEDOR GLOBAL DE LA PRESENTACIÓN -->
-    <div id="presentation-area">
-
-        <!-- ==========================================
-             DIAPOSITIVA 1: PORTADA
-             ========================================== -->
-        <div class="slide-container active" id="slide1">
-            <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center;">
-                <div style="background: var(--primary); color: #FFF; padding: 6px 24px; border-radius: 20px; font-family: 'Azeret Mono'; font-size: 15px; margin-bottom: 25px; letter-spacing: 2px;">EVALUACIÓN DE APRENDIZAJE 1</div>
-                <h1 style="font-size: 55px; margin: 10px 0; line-height: 1.1;">Teoría y Práctica del Customer Journey &<br><span style="color: var(--accent);">Métricas Financieras (KPIs)</span></h1>
-                <p style="font-size: 22px; color: #5D4037; margin-bottom: 30px; margin-top: 15px;">Proyecto: Exportación de Quinua en Grano (EE.UU. 2026)</p>
-                
-                <div style="background: #FFF8E7; padding: 30px 50px; border-radius: 15px; border: 1px dashed var(--accent); width: 100%; max-width: 900px;">
-                    <p style="font-weight: bold; color: #8D6E63; margin-bottom: 20px; letter-spacing: 2px;">EQUIPO DE TRABAJO (ADEX ESCUELA)</p>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 16px; text-align: left;">
-                        <div><span style="color:var(--accent); font-weight:bold; font-family:'Azeret Mono';">[100%]</span> Gianella Armas Cana</div>
-                        <div><span style="color:var(--accent); font-weight:bold; font-family:'Azeret Mono';">[100%]</span> Marilin Medina Apolinario</div>
-                        <div><span style="color:var(--accent); font-weight:bold; font-family:'Azeret Mono';">[100%]</span> Rosamía Céspedes Durand</div>
-                        <div><span style="color:var(--accent); font-weight:bold; font-family:'Azeret Mono';">[100%]</span> Eric Mozombite Shishco</div>
-                        <div><span style="color:var(--accent); font-weight:bold; font-family:'Azeret Mono';">[100%]</span> Paola Mamani Sanchez</div>
-                        <div><span style="color:var(--accent); font-weight:bold; font-family:'Azeret Mono';">[100%]</span> Tamia Obregón Espinoza</div>
-                    </div>
-                </div>
+    <!-- SIDEBAR DESKTOP -->
+    <aside class="w-72 bg-adex-darkBlue text-white flex-col shadow-2xl z-20 hidden lg:flex flex-shrink-0 relative">
+        <!-- Logo -->
+        <div class="p-6 border-b border-white/10 flex items-center gap-4">
+            <div class="bg-white p-2 rounded-xl shadow-md">
+                <img src="https://www.adex.edu.pe/wp-content/uploads/2020/01/favicon.png" alt="ADEX Escuela" class="w-8 h-8 object-contain">
             </div>
-            <div class="adex-logo">ADEX ESCUELA</div>
-            <div class="footer-text">Ciclo 2026-I | Partida: 1008.50.90.00</div>
+            <div>
+                <h1 class="text-2xl font-black tracking-tight leading-none">ADEX</h1>
+                <p class="text-[11px] tracking-[0.25em] text-adex-red uppercase font-black mt-1">Escuela</p>
+            </div>
         </div>
 
-        <!-- ==========================================
-             DIAPOSITIVA 2: TEORÍA Y LINEAMIENTOS
-             ========================================== -->
-        <div class="slide-container" id="slide2">
-            <h2 class="slide-title">Marco Teórico y Lineamientos <span>SEMANA 05</span></h2>
-            <div class="content-area">
-                <div class="two-column">
-                    <div>
-                        <h3 style="color: var(--info); margin-bottom: 15px; font-size: 22px;"><i class="fa-solid fa-book-open"></i> Teoría del Customer Journey Map</h3>
-                        <div class="theory-box" style="border-left-color: var(--info);">
-                            <p style="margin-bottom: 10px;">Según la revista <em>Economía</em> y <em>Lucidchart</em>, el Customer Journey es el conjunto de interacciones que tiene un consumidor desde que detecta una necesidad hasta que utiliza un producto y se vuelve promotor.</p>
-                            <p><strong>Fases Teóricas:</strong></p>
-                            <ol style="margin-left: 20px; font-size: 14px; margin-top: 5px;">
-                                <li>Conciencia (Awareness)</li>
-                                <li>Consideración (Evaluación de opciones)</li>
-                                <li>Decisión / Compra (Conversión)</li>
-                                <li>Experiencia / Retención (Uso)</li>
-                                <li>Fidelización y Promoción (Advocacy)</li>
-                            </ol>
-                        </div>
+        <!-- Navegación Desktop -->
+        <div class="p-5 flex-grow overflow-y-auto hide-scrollbar">
+            <p class="text-[10px] font-bold text-blue-300/60 uppercase tracking-widest mb-3 px-2">Vistas</p>
+            <nav class="space-y-2 mb-8">
+                <button onclick="changeView('all')" id="dt-btn-all" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-adex-blue text-white font-semibold transition-all shadow-md">
+                    <i class="ph-bold ph-squares-four text-xl"></i> Directorio Global
+                </button>
+                <button onclick="changeView('favorites')" id="dt-btn-fav" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-blue-200 hover:bg-white/5 font-medium transition-all group border border-transparent">
+                    <div class="flex items-center gap-3">
+                        <i class="ph-fill ph-star text-xl group-hover:text-yellow-400 transition-colors"></i> Favoritos
                     </div>
-                    <div>
-                        <h3 style="color: var(--success); margin-bottom: 15px; font-size: 22px;"><i class="fa-solid fa-list-check"></i> Lineamientos ADEX</h3>
-                        <ul class="fa-ul" style="gap: 15px; display: flex; flex-direction: column;">
-                            <li><span class="fa-li"><i class="fa-solid fa-route" style="color: var(--accent);"></i></span>Mapear las fases e integrarlo con <strong>Redes Sociales</strong>.</li>
-                            <li><span class="fa-li"><i class="fa-solid fa-triangle-exclamation" style="color: var(--danger);"></i></span>Identificar las <strong>Fricciones</strong> operativas y de mercado.</li>
-                            <li><span class="fa-li"><i class="fa-solid fa-calculator" style="color: var(--success);"></i></span>Calcular 3 indicadores financieros: <strong>ROI, CLV y CAC</strong> usando utilidades realistas (30%).</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="adex-logo">ADEX ESCUELA</div>
-            <div class="footer-text">Fundamentos Teóricos de la Presentación</div>
+                    <span id="dt-fav-counter" class="bg-white/10 text-xs py-1 px-2.5 rounded-full font-bold">0</span>
+                </button>
+            </nav>
+
+            <p class="text-[10px] font-bold text-blue-300/60 uppercase tracking-widest mb-3 px-2">Filtros Estratégicos</p>
+            <nav id="dt-category-nav" class="space-y-1.5">
+                <!-- Inyectado vía JS -->
+            </nav>
         </div>
 
-        <!-- ==========================================
-             DIAPOSITIVA 3: PASOS 1 Y 2 (BUYER PERSONA)
-             ========================================== -->
-        <div class="slide-container" id="slide3">
-            <h2 class="slide-title">Pasos 1 y 2: Objetivos y Buyer Persona <span>INICIO DEL MAPEO</span></h2>
-            <div class="content-area">
-                <div class="two-column">
-                    <div class="img-placeholder">
-                        <i class="fa-solid fa-basket-shopping" style="font-size: 50px; margin-bottom: 15px; color: var(--accent);"></i><br>
-                                            </div>
-                    <div>
-                        <div class="theory-box">
-                            <strong>Teoría Aplicada:</strong> Para crear un CJM, el paso 1 es "Establecer objetivos claros" y el paso 2 es "Crear Buyer Personas" detallando su demografía, comportamientos y necesidades reales.
-                        </div>
-                        
-                        <h3 style="font-size: 30px; color: var(--primary); margin-bottom: 5px;">Jennifer (35 años)</h3>
-                        <p style="font-family: 'Azeret Mono'; color: #777; margin-bottom: 15px; font-size: 14px;">"The LOHAS Meal Prepper" | California, EE.UU.</p>
-                        
-                        <ul style="margin-left: 20px; font-size: 15px;">
-                            <li style="margin-bottom: 10px;"><strong>Comportamiento:</strong> Madre profesional. Compra ingredientes puros (grano crudo) para su "Batch cooking" dominical.</li>
-                            <li style="margin-bottom: 10px;"><strong>Necesidad:</strong> Proteína vegetal limpia. No tiene tiempo para lavar la quinua (odia el sabor a saponina).</li>
-                            <li><strong>Objetivo del CJM:</strong> Mejorar su retención y asegurar que nuestro producto exportado cumpla sus exigencias éticas y de pureza.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="adex-logo">ADEX ESCUELA</div>
-            <div class="footer-text">Definición del Target B2C y Metas</div>
-        </div>
-
-        <!-- ==========================================
-             DIAPOSITIVA 4: FASE 1 - CONCIENCIA
-             ========================================== -->
-        <div class="slide-container" id="slide4">
-            <h2 class="slide-title">Fase 1: Conciencia (Awareness) <span>INTEGRACIÓN RR.SS.</span></h2>
-            <div class="content-area">
-                <div class="two-column">
-                    <div>
-                        <div class="journey-stage" style="border-top: 6px solid var(--info);">
-                            <i class="fa-solid fa-search journey-icon" style="color: var(--info);"></i>
-                            <div class="theory-box" style="background: #E3F2FD; border-color: var(--info); font-size: 13px; margin-bottom: 15px;">
-                                <strong>Teoría de RR.SS.:</strong> El 31% de los consumidores utiliza medios sociales para buscar nuevos artículos (Revista Economía). Se recomiendan herramientas como Google Analytics para rastrear el tráfico.
-                            </div>
-                            
-                            <h3 style="color: var(--info); font-size: 20px;">Aplicación: ¿Qué hace Jennifer?</h3>
-                            <p style="font-size: 15px; margin-bottom: 10px;">Busca fuentes de proteína "limpias". Escribe en Google y Pinterest: <em>"Organic pre-washed bulk quinoa"</em>.</p>
-                            <p style="font-size: 15px;">Nuestra marca peruana aparece mediante <strong>Pinterest Ads</strong> y posicionamiento SEO, destacando el diferenciador: <em>"Triple-washed, stone-free Andean Quinoa"</em>.</p>
-                            
-                            <div class="touchpoints" style="background: #BBDEFB; color: #0D47A1;">
-                                <i class="fa-solid fa-mouse-pointer"></i> Puntos de Contacto: Pinterest Ads / Google Search
-                            </div>
-                        </div>
-                    </div>
-                    <div class="img-placeholder">
-                        <i class="fa-solid fa-laptop" style="font-size: 50px; margin-bottom: 15px; color: var(--info);"></i><br>
-                                            </div>
-                </div>
-            </div>
-            <div class="adex-logo">ADEX ESCUELA</div>
-            <div class="footer-text">Customer Journey Map - Paso 3: Identificar Puntos de Contacto</div>
-        </div>
-
-        <!-- ==========================================
-             DIAPOSITIVA 5: FASE 2 - CONSIDERACIÓN
-             ========================================== -->
-        <div class="slide-container" id="slide5">
-            <h2 class="slide-title">Fase 2: Consideración <span>EVALUACIÓN Y SENTIMIENTO</span></h2>
-            <div class="content-area">
-                <div class="two-column">
-                    <div class="img-placeholder">
-                        <i class="fa-solid fa-tags" style="font-size: 50px; margin-bottom: 15px; color: #FBC02D;"></i><br>
-                                            </div>
-                    <div>
-                        <div class="journey-stage" style="border-top: 6px solid #FBC02D;">
-                            <i class="fa-solid fa-scale-balanced journey-icon" style="color: #FBC02D;"></i>
-                            <div class="theory-box" style="background: #FFF9C4; border-color: #FBC02D; font-size: 13px; margin-bottom: 15px;">
-                                <strong>Teoría de RR.SS.:</strong> El 56% de los consumidores sigue marcas para ver productos. Se sugiere usar "Brandwatch" para analizar el sentimiento y opiniones antes de que compren.
-                            </div>
-
-                            <h3 style="color: #F57F17; font-size: 20px;">Aplicación: La Evaluación Analítica</h3>
-                            <p style="font-size: 15px; margin-bottom: 10px;">Jennifer compara nuestro empaque en la tienda online. Dado que la quinua cruda es un <em>commodity</em> visual, la confianza se gana validando los <strong>"Nutrition Facts"</strong> y leyendo reviews en Twitter/Amazon.</p>
-                            <p style="font-size: 15px;">Verifica la presencia de sellos críticos: <strong>USDA Organic y Fair Trade</strong>.</p>
-                            
-                            <div class="touchpoints" style="background: #FFF59D; color: #E65100;">
-                                <i class="fa-solid fa-star"></i> Puntos de Contacto: Amazon Reviews / Sellos en Empaque / Twitter
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="adex-logo">ADEX ESCUELA</div>
-            <div class="footer-text">Customer Journey Map - Recopilación y Análisis de Datos</div>
-        </div>
-
-        <!-- ==========================================
-             DIAPOSITIVA 6: FASE 3 - COMPRA
-             ========================================== -->
-        <div class="slide-container" id="slide6">
-            <h2 class="slide-title">Fase 3: Decisión y Compra <span>CONVERSIÓN</span></h2>
-            <div class="content-area">
-                <div class="two-column">
-                    <div>
-                        <div class="journey-stage" style="border-top: 6px solid var(--success);">
-                            <i class="fa-solid fa-cart-shopping journey-icon" style="color: var(--success);"></i>
-                            <div class="theory-box" style="background: #E8F5E9; border-color: var(--success); font-size: 13px; margin-bottom: 15px;">
-                                <strong>Teoría de Miro:</strong> Los puntos de contacto de compra deben ser lo más eficientes posibles para que el cliente no cambie de opinión. Un sitio web optimizado es vital.
-                            </div>
-
-                            <h3 style="color: var(--success); font-size: 20px;">Aplicación: La Conversión Final</h3>
-                            <p style="font-size: 15px; margin-bottom: 10px;">El precio de nuestra bolsa retail (1 lb) es de <strong>$9.99</strong>, muy superior a los granos convencionales asiáticos ($5.99).</p>
-                            <p style="font-size: 15px;">Sin embargo, la garantía visible de "Pre-washed" (ahorro de tiempo) en un checkout rápido y sin fricciones la convence. Jennifer adquiere 2 bolsas.</p>
-                            
-                            <div class="touchpoints" style="background: #C8E6C9; color: #1B5E20;">
-                                <i class="fa-solid fa-credit-card"></i> Puntos de Contacto: Pasarela de E-commerce / Confirmación
-                            </div>
-                        </div>
-                    </div>
-                    <div class="img-placeholder">
-                        <i class="fa-solid fa-credit-card" style="font-size: 50px; margin-bottom: 15px; color: var(--success);"></i><br>
-                                            </div>
-                </div>
-            </div>
-            <div class="adex-logo">ADEX ESCUELA</div>
-            <div class="footer-text">Customer Journey Map - Optimización de Transacción</div>
-        </div>
-
-        <!-- ==========================================
-             DIAPOSITIVA 7: FASES 4 y 5 - RETENCIÓN Y PROMOCIÓN
-             ========================================== -->
-        <div class="slide-container" id="slide7">
-            <h2 class="slide-title">Fases 4 y 5: Experiencia y Promoción <span>ADVOCACY</span></h2>
-            <div class="content-area">
-                <div class="two-column">
-                    <div class="img-placeholder">
-                        <i class="fa-solid fa-camera" style="font-size: 50px; margin-bottom: 15px; color: var(--danger);"></i><br>
-                                            </div>
-                    <div>
-                        <div class="journey-stage" style="border-top: 6px solid var(--danger);">
-                            <i class="fa-solid fa-heart journey-icon" style="color: var(--danger);"></i>
-                            <div class="theory-box" style="background: #FFEBEE; border-color: var(--danger); font-size: 13px; margin-bottom: 15px;">
-                                <strong>Teoría (Revista Economía):</strong> En la fase de Promoción, el cliente se convierte en defensor (advocate) de la marca y la recomienda generando User Generated Content (UGC).
-                            </div>
-
-                            <h3 style="color: var(--danger); font-size: 20px;">Aplicación: El Momento de la Verdad</h3>
-                            <p style="font-size: 15px; margin-bottom: 10px;">Jennifer cocina el grano. Efectivamente, la selección óptica en Perú garantizó cero piedras y el proceso eliminó la saponina (cero amargor).</p>
-                            <p style="font-size: 15px;">Satisfecha, arma su "Quinoa Bowl", le toma una foto y la sube a Instagram <strong>etiquetando a nuestra marca</strong>, atrayendo a nuevas "Jennifers".</p>
-                            
-                            <div class="touchpoints" style="background: #FFCDD2; color: #B71C1C;">
-                                <i class="fa-brands fa-instagram"></i> Puntos de Contacto: Uso del Producto / Instagram (UGC)
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="adex-logo">ADEX ESCUELA</div>
-            <div class="footer-text">Customer Journey Map - Experiencia Post-Compra</div>
-        </div>
-
-        <!-- ==========================================
-             DIAPOSITIVA 8: FRICCIONES
-             ========================================== -->
-        <div class="slide-container" id="slide8">
-            <h2 class="slide-title">Análisis de Fricciones Críticas <span>IDENTIFICAR Y AJUSTAR</span></h2>
-            <div class="content-area">
-                <div class="theory-box" style="margin-bottom: 20px; text-align: center;">
-                    <strong>Teoría:</strong> "Revisar el mapa para identificar áreas de mejora. Busca puntos de fricción y realiza ajustes en tus procesos." (Paso 7 del mapeo).
-                </div>
-                
-                <div class="three-column">
-                    <div class="info-card" style="border-top: 4px solid var(--danger);">
-                        <h3 style="color: var(--danger); font-size:18px;"><i class="fa-solid fa-eye-slash"></i> 1. Fricción Informativa</h3>
-                        <p style="font-size: 14px; margin-bottom: 5px;"><strong>Etapa: Consideración.</strong></p>
-                        <p style="font-size: 13px;">El anaquel digital está saturado. Si los sellos "Organic/Fair Trade" no son legibles en la miniatura de Amazon en 3 segundos, el cliente nos descarta por la competencia boliviana.</p>
-                    </div>
-                    <div class="info-card" style="border-top: 4px solid #EF6C00;">
-                        <h3 style="color: #EF6C00; font-size:18px;"><i class="fa-solid fa-wallet"></i> 2. Fricción de Precio</h3>
-                        <p style="font-size: 14px; margin-bottom: 5px;"><strong>Etapa: Compra.</strong></p>
-                        <p style="font-size: 13px;">El PVP de $9.99 choca con sustitutos baratos ($2.00). Si la ficha técnica no comunica fuertemente el valor de los 9 aminoácidos, el cliente abandona el carrito de compras.</p>
-                    </div>
-                    <div class="info-card" style="border-top: 4px solid var(--primary);">
-                        <h3 style="color: var(--primary); font-size:18px;"><i class="fa-solid fa-plant-wilt"></i> 3. Fricción Operativa (Grave)</h3>
-                        <p style="font-size: 14px; margin-bottom: 5px;"><strong>Etapa: Experiencia de Uso.</strong></p>
-                        <p style="font-size: 13px;">Si la planta en Perú falla y envía materia prima con trazas de saponina o piedras, la experiencia de cocina de Jennifer es terrible. El CLV cae a cero de inmediato.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="adex-logo">ADEX ESCUELA</div>
-            <div class="footer-text">Gestión de Riesgos del Customer Journey</div>
-        </div>
-
-        <!-- ==========================================
-             DIAPOSITIVA 9: INTRODUCCIÓN A KPIs (TEORÍA)
-             ========================================== -->
-        <div class="slide-container" id="slide9">
-            <h2 class="slide-title">Teoría de KPIs Financieros <span>¿POR QUÉ MEDIR CX?</span></h2>
-            <div class="content-area">
-                <div class="two-column">
-                    <div>
-                        <div class="theory-box" style="margin-bottom: 20px;">
-                            <strong>Teoría del Impacto (Aberdeen Group):</strong> Gestionar correctamente el Customer Experience (CX) genera un <strong>aumento del 24.9% interanual en ingresos</strong> y una reducción del 16.8% en el ciclo de ventas. La buena experiencia hace rentable a la empresa.
-                        </div>
-                        <p style="font-size: 15px; margin-bottom: 15px;">Para medir el éxito de nuestro modelo Direct-to-Consumer (DTC) de exportación, calcularemos:</p>
-                        
-                        <ul style="font-size: 15px; line-height: 1.6; padding-left: 20px;">
-                            <li style="margin-bottom: 8px;"><strong style="color: var(--info);">CAC (Costo de Adquisición):</strong> Dinero invertido en marketing para conseguir un solo cliente nuevo.</li>
-                            <li style="margin-bottom: 8px;"><strong style="color: var(--success);">CLV (Customer Lifetime Value):</strong> Ganancia neta proyectada que deja un cliente a lo largo de su relación comercial (1 año).</li>
-                            <li><strong style="color: var(--accent);">ROI (Retorno de Inversión):</strong> Rentabilidad porcentual de la campaña inicial (¿Se ganó o se perdió plata?).</li>
-                        </ul>
-                    </div>
-                    <div class="img-placeholder">
-                        <i class="fa-solid fa-chart-pie" style="font-size: 50px; margin-bottom: 15px; color: var(--primary);"></i><br>
-                                            </div>
-                </div>
-            </div>
-            <div class="adex-logo">ADEX ESCUELA</div>
-            <div class="footer-text">Fundamentos de Analítica Comercial e Impacto CX</div>
-        </div>
-
-        <!-- ==========================================
-             DIAPOSITIVA 10: ESCENARIO BASE
-             ========================================== -->
-        <div class="slide-container" id="slide10">
-            <h2 class="slide-title">El Escenario Comercial <span>SUPUESTOS ADEX 2026</span></h2>
-            <div class="content-area">
-                <div class="two-column">
-                    <div>
-                        <div class="info-card" style="border-left: 6px solid var(--primary); margin-bottom: 20px;">
-                            <h3 style="color: var(--primary); font-size: 18px;">Costos de Marketing (Mes 1)</h3>
-                            <ul class="fa-ul" style="font-size: 15px; line-height: 1.8;">
-                                <li><span class="fa-li"><i class="fa-solid fa-laptop" style="color: #999;"></i></span>Desarrollo E-commerce: <strong>$1,500</strong></li>
-                                <li><span class="fa-li"><i class="fa-solid fa-ad" style="color: #999;"></i></span>Pauta (Amazon/Pinterest Ads): <strong>$500</strong></li>
-                                <li><span class="fa-li"><i class="fa-solid fa-handshake" style="color: #999;"></i></span>Trade Mkt (Muestras): <strong>$300</strong></li>
-                            </ul>
-                            <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #CCC; font-size: 18px; font-weight: bold; text-align: right; color: var(--danger);">
-                                INVERSIÓN TOTAL: $2,300
-                            </div>
-                        </div>
+        <!-- Créditos Desktop -->
+        <div class="p-5 bg-gradient-to-t from-black/40 to-transparent mt-auto">
+            <div class="bg-white/5 rounded-xl p-4 border border-white/10 backdrop-blur-sm">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-adex-red to-orange-500 flex items-center justify-center text-white font-black shadow-lg">
+                        EM
                     </div>
                     <div>
-                        <div class="info-card" style="border-left: 6px solid var(--success);">
-                            <h3 style="color: var(--success); font-size: 18px;">Métricas de Producto y Demanda</h3>
-                            <ul class="fa-ul" style="font-size: 15px; line-height: 1.8;">
-                                <li><span class="fa-li"><i class="fa-solid fa-tag" style="color: #999;"></i></span>Precio Venta (Bolsa 1lb): <strong>$9.99</strong></li>
-                                <li><span class="fa-li"><i class="fa-solid fa-piggy-bank" style="color: #999;"></i></span>Margen Neto ADEX: <strong>30% ($3.00/bolsa)</strong></li>
-                                <li><span class="fa-li"><i class="fa-solid fa-users" style="color: #999;"></i></span>Nuevos clientes captados: <strong>500 clientes</strong></li>
-                                <li><span class="fa-li"><i class="fa-solid fa-basket-shopping" style="color: #999;"></i></span>Frecuencia de compra: <strong>2 bolsas / mes</strong></li>
-                                <li><span class="fa-li"><i class="fa-solid fa-calendar" style="color: #999;"></i></span>Retención proyectada: <strong>1 Año (12 meses)</strong></li>
-                            </ul>
-                        </div>
+                        <p class="text-[9px] text-blue-200 uppercase tracking-wider font-bold">Investigador</p>
+                        <p class="text-sm font-bold text-white">Eric Mozombite</p>
                     </div>
                 </div>
-            </div>
-            <div class="adex-logo">ADEX ESCUELA</div>
-            <div class="footer-text">Variables Aterrizadas y Lógicas</div>
-        </div>
-
-        <!-- ==========================================
-             DIAPOSITIVA 11: CÁLCULO CAC
-             ========================================== -->
-        <div class="slide-container" id="slide11">
-            <h2 class="slide-title">Indicador 1: CAC <span>CÁLCULO EDUCATIVO</span></h2>
-            <div class="content-area" style="align-items: center;">
-                <div style="background: var(--bg-card); border: 2px solid var(--info); border-radius: 15px; padding: 40px; width: 80%; text-align: center;">
-                    <h3 style="color: var(--info); font-size: 26px; margin-bottom: 20px;">Costo de Adquisición de Clientes</h3>
-                    
-                    <div style="background: #E3F2FD; display: inline-block; padding: 12px 25px; border-radius: 10px; font-family: 'Azeret Mono'; font-size: 16px; margin-bottom: 30px;">
-                        CAC = Inversión Total / Clientes Nuevos
-                    </div>
-
-                    <div style="display: flex; justify-content: center; align-items: center; font-size: 28px; font-weight: bold; color: var(--primary);">
-                        <div style="text-align: center;">$2,300<br><span style="font-size: 13px; font-weight: normal; color: #777;">Inversión Mkt</span></div>
-                        <div style="margin: 0 30px; color: #CCC;">÷</div>
-                        <div style="text-align: center;">500<br><span style="font-size: 13px; font-weight: normal; color: #777;">Clientes Nuevos</span></div>
-                        <div style="margin: 0 30px; color: #CCC;">=</div>
-                        <div style="color: var(--info); font-size: 45px;">$4.60</div>
-                    </div>
-
-                    <p style="margin-top: 30px; font-size: 15px; border-top: 1px solid #eee; padding-top: 20px;">
-                        <strong>Lectura Teórica:</strong> Invertimos $4.60 para que Jennifer realice su primera compra. Al ganar solo $3.00 netos por bolsa, en la primera transacción tenemos saldo negativo. La clave de la rentabilidad es la <strong>retención (fidelización en el CJM)</strong>.
+                <div class="pt-2 mt-2 border-t border-white/10">
+                    <p class="text-[10px] text-blue-100/70 italic flex items-center gap-1.5">
+                        <i class="ph-fill ph-heart text-adex-red"></i> Inspirado en Benjamín A.
                     </p>
                 </div>
             </div>
-            <div class="adex-logo">ADEX ESCUELA</div>
-            <div class="footer-text">Aplicación Práctica de KPI 1</div>
         </div>
+    </aside>
 
-        <!-- ==========================================
-             DIAPOSITIVA 12: CÁLCULO CLV
-             ========================================== -->
-        <div class="slide-container" id="slide12">
-            <h2 class="slide-title">Indicador 2: CLV <span>CÁLCULO EDUCATIVO</span></h2>
-            <div class="content-area" style="align-items: center;">
-                <div style="background: var(--bg-card); border: 2px solid var(--success); border-radius: 15px; padding: 40px; width: 80%; text-align: center;">
-                    <h3 style="color: var(--success); font-size: 26px; margin-bottom: 20px;">Customer Lifetime Value (Proyección 1 Año)</h3>
-                    
-                    <div style="background: #E8F5E9; display: inline-block; padding: 12px 25px; border-radius: 10px; font-family: 'Azeret Mono'; font-size: 16px; margin-bottom: 20px;">
-                        CLV = (Gasto Bruto Anual) x Margen Neto %
-                    </div>
-
-                    <div style="text-align: left; margin: 0 auto 20px auto; width: 70%; font-size: 15px;">
-                        <i class="fa-solid fa-check" style="color: var(--success);"></i> <strong>Paso 1:</strong> 2 bolsas/mes x 12 meses = 24 bolsas al año.<br>
-                        <i class="fa-solid fa-check" style="color: var(--success);"></i> <strong>Paso 2:</strong> 24 bolsas x $9.99 = $239.76 facturados por cliente.
-                    </div>
-
-                    <div style="display: flex; justify-content: center; align-items: center; font-size: 28px; font-weight: bold; color: var(--primary);">
-                        <div style="text-align: center;">$239.76<br><span style="font-size: 13px; font-weight: normal; color: #777;">Gasto del cliente</span></div>
-                        <div style="margin: 0 30px; color: #CCC;">x</div>
-                        <div style="text-align: center;">30%<br><span style="font-size: 13px; font-weight: normal; color: #777;">Margen Utilidad</span></div>
-                        <div style="margin: 0 30px; color: #CCC;">=</div>
-                        <div style="color: var(--success); font-size: 45px;">$71.93</div>
-                    </div>
-
-                    <p style="margin-top: 20px; font-size: 15px; border-top: 1px solid #eee; padding-top: 20px;">
-                        <strong>Lectura Teórica:</strong> Gracias a una excelente experiencia post-compra (Cero fricciones), la lealtad de Jennifer le dejará a la empresa <strong>$71.93 de ganancia pura</strong> en el transcurso de un año.
-                    </p>
-                </div>
-            </div>
-            <div class="adex-logo">ADEX ESCUELA</div>
-            <div class="footer-text">Aplicación Práctica de KPI 2</div>
-        </div>
-
-        <!-- ==========================================
-             DIAPOSITIVA 13: CÁLCULO ROI
-             ========================================== -->
-        <div class="slide-container" id="slide13">
-            <h2 class="slide-title">Indicador 3: ROI <span>CÁLCULO EDUCATIVO (MES 1)</span></h2>
-            <div class="content-area" style="align-items: center;">
-                <div style="background: var(--bg-card); border: 2px solid var(--accent); border-radius: 15px; padding: 40px; width: 80%; text-align: center;">
-                    <h3 style="color: var(--accent); font-size: 26px; margin-bottom: 20px;">Retorno de Inversión (Campaña Inicial)</h3>
-                    
-                    <div style="background: #FFF8E7; display: inline-block; padding: 12px 25px; border-radius: 10px; font-family: 'Azeret Mono'; font-size: 16px; margin-bottom: 20px;">
-                        ROI = [(Ganancia Neta - Inversión) / Inversión] x 100
-                    </div>
-
-                    <div style="text-align: left; margin: 0 auto 20px auto; width: 80%; font-size: 15px;">
-                        <strong>Ganancia Neta Mes 1:</strong> 500 clientes x 2 bolsas = 1000 bolsas. <br>
-                        1000 bolsas x $3.00 utilidad = <strong>$3,000.00 de Beneficio.</strong>
-                    </div>
-
-                    <div style="display: flex; justify-content: center; align-items: center; font-size: 24px; font-weight: bold; color: var(--primary);">
-                        <div style="text-align: center;">[($3,000 - $2,300) / $2,300] * 100</div>
-                        <div style="margin: 0 30px; color: #CCC;">=</div>
-                        <div style="color: var(--accent); font-size: 45px;">30.43%</div>
-                    </div>
-
-                    <p style="margin-top: 20px; font-size: 15px; border-top: 1px solid #eee; padding-top: 20px;">
-                        <strong>Lectura Teórica:</strong> Un ROI del 30.43% significa que la empresa recuperó la totalidad de los $2,300 invertidos en publicidad y desarrollo web, y adicionalmente <strong>ganó 30 centavos de dólar extra por cada dólar invertido</strong> durante el primer mes de operaciones.
-                    </p>
-                </div>
-            </div>
-            <div class="adex-logo">ADEX ESCUELA</div>
-            <div class="footer-text">Aplicación Práctica de KPI 3</div>
-        </div>
-
-        <!-- ==========================================
-             DIAPOSITIVA 14: SIMULADOR & CONCLUSIÓN
-             ========================================== -->
-        <div class="slide-container" id="slide14">
-            <h2 class="slide-title">Simulador Interactivo <span>ANÁLISIS DE RENTABILIDAD CX</span></h2>
-            <div class="content-area">
-                <div class="sim-grid">
-                    
-                    <!-- Panel Izquierdo: Inputs -->
-                    <div class="sim-panel">
-                        <h3 style="color: var(--primary);"><i class="fa-solid fa-sliders"></i> Ingresa tus Datos</h3>
-                        <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Modifica los valores para entender el impacto de la teoría en las finanzas reales.</p>
-                        
-                        <div class="input-group">
-                            <label>Inversión Total Mkt ($)</label>
-                            <input type="number" id="sim_inv" value="2300" step="100" oninput="calcularSimulador()">
-                        </div>
-                        <div class="input-group">
-                            <label>Nuevos Clientes</label>
-                            <input type="number" id="sim_cli" value="500" oninput="calcularSimulador()">
-                        </div>
-                        <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
-                        <div class="input-group">
-                            <label>Precio Venta (PVP $)</label>
-                            <input type="number" id="sim_pvp" value="9.99" step="0.50" oninput="calcularSimulador()">
-                        </div>
-                        <div class="input-group">
-                            <label>Margen Neto (%)</label>
-                            <input type="number" id="sim_mar" value="30" oninput="calcularSimulador()">
-                        </div>
-                        <div class="input-group">
-                            <label>Frecuencia x Mes</label>
-                            <input type="number" id="sim_freq" value="2" oninput="calcularSimulador()">
-                        </div>
-                    </div>
-
-                    <!-- Panel Derecho: Resultados y Educación -->
-                    <div class="sim-panel" style="background: var(--bg-card); border: 2px solid #E0E0E0;">
-                        <h3 style="color: var(--primary);"><i class="fa-solid fa-chart-line"></i> Dashboard en Tiempo Real</h3>
-                        
-                        <div class="kpi-board">
-                            <div class="kpi-box blue">
-                                <div class="kpi-title">CAC</div>
-                                <div class="kpi-value" id="out_cac">$4.60</div>
-                            </div>
-                            <div class="kpi-box green">
-                                <div class="kpi-title">CLV (1 Año)</div>
-                                <div class="kpi-value" id="out_clv">$71.93</div>
-                            </div>
-                            <div class="kpi-box gold">
-                                <div class="kpi-title">ROI Mes 1</div>
-                                <div class="kpi-value" id="out_roi">30.4%</div>
-                            </div>
-                        </div>
-
-                        <div style="text-align: center; margin-bottom: 15px;">
-                            <span style="font-size: 14px; font-weight: bold; color: #555;">RATIO LTV : CAC = </span>
-                            <span id="out_ratio" style="font-size: 26px; font-weight: bold; color: var(--success);">15.6 : 1</span>
-                        </div>
-
-                        <!-- Caja Educativa Dinámica -->
-                        <div class="edu-panel" id="edu_box">
-                            <div class="edu-icon"><i class="fa-solid fa-lightbulb"></i></div>
-                            <div class="edu-text">
-                                <h4 id="edu_title">Conclusión Estratégica Teórica: Negocio Saludable</h4>
-                                <p id="edu_desc" style="font-size: 13px;">En la teoría de Startups, un ratio <strong>mayor a 3:1</strong> es ideal. Nuestro cliente deja <span class="highlight">15 veces más ganancia</span> de lo que costó adquirirlo. <strong>Recomendación:</strong> Escalar agresivamente el presupuesto en Ads gracias al éxito de la experiencia de cliente (CJM).</p>
-                            </div>
-                        </div>
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col h-full relative overflow-hidden bg-[#f0f4f8]">
+        
+        <!-- HEADER MOBILE & DESKTOP (Search) -->
+        <header class="bg-white px-4 lg:px-8 py-4 flex flex-col lg:flex-row lg:items-center justify-between z-10 shadow-sm gap-4">
+            
+            <!-- Mobile Header (Logo + Credits) -->
+            <div class="flex items-center justify-between lg:hidden">
+                <div class="flex items-center gap-3">
+                    <img src="https://www.adex.edu.pe/wp-content/uploads/2020/01/favicon.png" alt="ADEX" class="w-8 h-8 drop-shadow-sm">
+                    <div>
+                        <span class="font-black text-adex-darkBlue text-xl leading-none block">ADEX</span>
+                        <span class="font-black text-adex-red text-[10px] tracking-[0.2em] uppercase block">Escuela</span>
                     </div>
                 </div>
+                <!-- Mini Credit Mobile -->
+                <div class="text-right flex flex-col items-end" onclick="alert('Desarrollado por: Eric Mozombite\nInspirado en: Benjamín Alejandro')">
+                    <span class="bg-adex-red text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wide">Autor</span>
+                    <span class="text-xs font-bold text-slate-700 mt-0.5">Eric M.</span>
+                </div>
             </div>
-            <div class="adex-logo">ADEX ESCUELA</div>
-            <div class="footer-text">Herramienta Interactiva HTML / JS</div>
+
+            <!-- Search Bar -->
+            <div class="relative w-full lg:max-w-2xl flex-1 group">
+                <i class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-adex-blue transition-colors"></i>
+                <input type="text" id="search-input" placeholder="Buscar herramienta, uso o palabra clave (ej. TLC, Arancel)..." 
+                    class="w-full bg-slate-100/70 border border-slate-200 rounded-2xl pl-11 pr-4 py-3 lg:py-3.5 text-sm font-medium text-slate-800 focus:ring-4 focus:ring-adex-blue/10 focus:bg-white focus:border-adex-blue transition-all outline-none placeholder:text-slate-400">
+            </div>
+        </header>
+
+        <!-- CATEGORIES MOBILE (Horizontal Scroll) -->
+        <div class="lg:hidden bg-white border-b border-slate-200 py-3 px-2 shadow-sm z-10">
+            <div id="mob-category-nav" class="flex gap-2 overflow-x-auto hide-scrollbar pb-1 px-2">
+                <!-- Inyectado vía JS -->
+            </div>
         </div>
 
-        <!-- --- CONTROLES DE NAVEGACIÓN --- -->
-        <div class="nav-controls">
-            <button id="btnInicio" class="btn-nav" onclick="irInicio()">
-                <i class="fa-solid fa-house"></i> Inicio
+        <!-- CARDS GRID AREA -->
+        <div class="flex-1 overflow-y-auto p-4 lg:p-8 pb-28 lg:pb-8 scroll-smooth" id="main-scroll-area">
+            
+            <div class="mb-6 lg:mb-8 flex flex-col lg:flex-row lg:items-end justify-between gap-2">
+                <div>
+                    <h2 id="view-title" class="text-2xl lg:text-3xl font-black text-slate-900 tracking-tight">Directorio Global</h2>
+                    <p id="view-desc" class="text-sm lg:text-base text-slate-500 mt-1 font-medium">Explora las fuentes de inteligencia comercial.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span id="results-count" class="bg-adex-blue/10 text-adex-blue text-xs lg:text-sm font-bold px-3 py-1.5 rounded-lg inline-block"></span>
+                </div>
+            </div>
+
+            <div id="tools-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 lg:gap-6">
+                <!-- Tarjetas -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-center px-4">
+                <div class="w-24 h-24 bg-slate-200/50 rounded-full flex items-center justify-center mb-6">
+                    <i id="empty-icon" class="ph-fill ph-magnifying-glass text-5xl text-slate-400"></i>
+                </div>
+                <h3 id="empty-title" class="text-xl font-black text-slate-800 mb-2">Sin resultados</h3>
+                <p id="empty-desc" class="text-base text-slate-500 max-w-sm mx-auto">Intenta buscar con otros términos.</p>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAV (MOBILE ONLY) -->
+        <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-slate-200 shadow-nav pb-safe z-50 flex justify-around items-center px-2 py-1">
+            <button onclick="changeView('all')" id="mob-btn-all" class="flex flex-col items-center justify-center w-full py-2.5 text-adex-blue font-bold transition-colors relative">
+                <i class="ph-fill ph-squares-four text-[26px] mb-1"></i>
+                <span class="text-[10px] font-black uppercase tracking-wider">Explorar</span>
             </button>
-            <button id="btnSiguiente" class="btn-nav" onclick="siguienteSlide()">
-                Siguiente <i class="fa-solid fa-chevron-right"></i>
+            
+            <!-- Botón central decorativo -->
+            <div class="relative -top-5 flex-shrink-0">
+                <div class="w-14 h-14 bg-gradient-to-tr from-adex-darkBlue to-adex-blue rounded-full flex items-center justify-center shadow-lg border-4 border-[#f0f4f8] text-white">
+                    <i class="ph-bold ph-magnifying-glass text-2xl"></i>
+                </div>
+            </div>
+
+            <button onclick="changeView('favorites')" id="mob-btn-fav" class="flex flex-col items-center justify-center w-full py-2.5 text-slate-400 font-medium hover:text-slate-800 transition-colors relative">
+                <div class="relative">
+                    <i class="ph-fill ph-star text-[26px] mb-1 transition-colors" id="mob-star-icon"></i>
+                    <span id="mob-fav-counter" class="absolute -top-1 -right-2 bg-adex-red text-white text-[9px] font-black w-[18px] h-[18px] rounded-full flex items-center justify-center border-2 border-white shadow-sm">0</span>
+                </div>
+                <span class="text-[10px] font-black uppercase tracking-wider">Favoritos</span>
             </button>
-        </div>
+        </nav>
+    </main>
 
-    </div>
-
-    <!-- ==========================================
-         SCRIPT DE NAVEGACIÓN Y SIMULADOR
-         ========================================== -->
     <script>
-        // Lógica de Navegación de Diapositivas
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide-container');
-        const btnInicio = document.getElementById('btnInicio');
-        const btnSiguiente = document.getElementById('btnSiguiente');
+        // --- DATA DE HERRAMIENTAS (Clasificada según tus apuntes) ---
+        const toolsData = [
+            // 1. Información Nacional
+            { id: "t1", cat: "Información Nacional", name: "SUNAT", desc: "Verifica la formalidad de empresas (Consulta RUC), padrón de exportadoras y operatividad aduanera.", tags: "RUC, Formalidad, Aduanas", url: "https://e-consultaruc.sunat.gob.pe/", icon: "ph-buildings" },
+            { id: "t2", cat: "Información Nacional", name: "INEI", desc: "Zonas de producción, estadísticas de Producción Nacional y censos demográficos.", tags: "Demografía, Censo, PBI", url: "https://www.gob.pe/inei", icon: "ph-chart-pie-slice" },
+            { id: "t3", cat: "Información Nacional", name: "SIEA MIDAGRI", desc: "Estadísticas del sector agrario: Calendario de siembra, cosecha y producción agrícola.", tags: "Agro, Cosecha, Siembra", url: "https://siea.midagri.gob.pe/portal/", icon: "ph-plant" },
+            { id: "t4", cat: "Información Nacional", name: "Catálogo MIDAGRI", desc: "Directorio oficial de proveedores y productores agrarios a nivel nacional.", tags: "Proveedores, Directorio", url: "https://catalogo.midagri.gob.pe/", icon: "ph-address-book" },
+            { id: "t5", cat: "Información Nacional", name: "PRODUCE", desc: "Datos de producción marina (pesca y acuicultura) e industrial manufacturera.", tags: "Pesca, Industria, Acuicultura", url: "https://ogeiee.produce.gob.pe", icon: "ph-factory" },
+            { id: "t6", cat: "Información Nacional", name: "SERFOR", desc: "Estadísticas sobre flora, hierbas, fauna silvestre y productos forestales.", tags: "Madera, Flora, Fauna", url: "https://sniffs.serfor.gob.pe", icon: "ph-tree" },
+            { id: "t7", cat: "Información Nacional", name: "ADT (ADEX Data Trade)", desc: "Plataforma para ver importaciones y exportaciones peruanas detalladas por puerto/aduana.", tags: "ADEX, FOB, CIF, Puertos", url: "https://www.adexdatatrade.com", icon: "ph-chart-line-up" },
+            { id: "t8", cat: "Información Nacional", name: "Veritrade", desc: "Inteligencia comercial para identificar empresas importadoras y exportadoras reales.", tags: "Competencia, Importadores", url: "https://www.veritradecorp.com", icon: "ph-detective" },
+            { id: "t9", cat: "Información Nacional", name: "Acuerdos Comerciales", desc: "Portal de MINCETUR con el detalle de los TLCs y preferencias arancelarias del Perú.", tags: "TLC, MINCETUR, Convenios", url: "https://www.acuerdoscomerciales.gob.pe", icon: "ph-handshake" },
+            { id: "t10", cat: "Información Nacional", name: "Tu Mercado Perú", desc: "Vitrina de PROMPERÚ que conecta la oferta exportable regional con compradores globales.", tags: "Vitrina, PromPerú, B2B", url: "https://www.tumercadoperu.com", icon: "ph-storefront" },
+            
+            // 2. Riesgo y Entorno
+            { id: "t11", cat: "Riesgo y Entorno", name: "EPI Yale", desc: "Índice de Desempeño Ambiental. Evalúa la sostenibilidad y el estado ecológico por país.", tags: "EPI, Medio Ambiente", url: "https://epi.yale.edu/measure/2024/EPI", icon: "ph-leaf" },
+            { id: "t12", cat: "Riesgo y Entorno", name: "Transparency Int.", desc: "Índice de Percepción de la Corrupción (CPI). Mide el riesgo ético y transparencia.", tags: "CPI, Corrupción, Ética", url: "https://www.transparency.org/en/cpi/2025", icon: "ph-scales" },
+            { id: "t13", cat: "Riesgo y Entorno", name: "Doing Business", desc: "Ranking histórico que mide la facilidad para hacer negocios, obtención de permisos e inversión.", tags: "Trámites, BM, Inversión", url: "https://archive.doingbusiness.org/es/rankings", icon: "ph-briefcase" },
+            { id: "t14", cat: "Riesgo y Entorno", name: "COFACE", desc: "Análisis macroeconómico y mapas de evaluación de riesgo país a nivel mundial.", tags: "Riesgo País, Impago", url: "https://www.coface.com.pe", icon: "ph-warning-circle" },
+            { id: "t15", cat: "Riesgo y Entorno", name: "CESCE", desc: "Gestión de seguros de crédito a la exportación e información de riesgo comercial.", tags: "Seguro crédito, Pólizas", url: "https://www.cesce.es", icon: "ph-shield-check" },
+            { id: "t16", cat: "Riesgo y Entorno", name: "CIAL D&B", desc: "Software financiero para evaluar la solvencia y riesgo de crédito en transacciones B2B.", tags: "D&B, Central de riesgo", url: "https://www.cialdnb.com", icon: "ph-bank" },
 
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                if (i === index) {
-                    slide.classList.add('active');
+            // 3. Mercado y Estadísticas
+            { id: "t17", cat: "Mercado y Estadísticas", name: "Trade Map", desc: "Base de datos mundial para ver importaciones y exportaciones a nivel de país y partida.", tags: "Flujos globales, ITC", url: "https://www.trademap.org", icon: "ph-globe-hemisphere-east" },
+            { id: "t18", cat: "Mercado y Estadísticas", name: "FAO STAT", desc: "Data estadística mundial sobre la producción de alimentos, agricultura y ganadería.", tags: "FAO, Alimentos, Agro", url: "https://www.fao.org/faostat/", icon: "ph-wheat" },
+            { id: "t19", cat: "Mercado y Estadísticas", name: "CIA World Factbook", desc: "Indicadores geográficos, demográficos, económicos y ambientales de todos los países.", tags: "CIA, Geografía, Perfil país", url: "https://www.cia.gov/the-world-factbook/", icon: "ph-book-open" },
+            { id: "t20", cat: "Mercado y Estadísticas", name: "Euromonitor", desc: "Inteligencia profunda sobre tendencias de consumo, tamaño de mercado retail y competencia.", tags: "Tendencias, Consumidor", url: "https://www.euromonitor.com", icon: "ph-trend-up" },
+            { id: "t21", cat: "Mercado y Estadísticas", name: "AUMA Ferias", desc: "Buscador de ferias internacionales con un enfoque técnico e industrial (mercado alemán).", tags: "Ferias, Exhibiciones, B2B", url: "https://www.auma.de/en", icon: "ph-ticket" },
+            { id: "t22", cat: "Mercado y Estadísticas", name: "nFerias", desc: "Directorio global para encontrar exposiciones, congresos y eventos comerciales por sector.", tags: "Ferias, Congresos, Stands", url: "https://www.nferias.com", icon: "ph-presentation-chart" },
+            { id: "t23", cat: "Mercado y Estadísticas", name: "Institutos de Estadística", desc: "Directorio oficial (14796) con los enlaces a los institutos estadísticos de 195 países.", tags: "14796, Censos globales", url: "https://www.gob.pe/14796", icon: "ph-list-numbers" },
+
+            // 4. Logística y Tránsito
+            { id: "t24", cat: "Logística y Tránsito", name: "LPI (Banco Mundial)", desc: "Índice de Desempeño Logístico. Evalúa eficiencia de aduanas e infraestructura por país.", tags: "LPI, Aduanas, Banco Mundial", url: "https://lpi.worldbank.org/international/global", icon: "ph-truck" },
+            { id: "t25", cat: "Logística y Tránsito", name: "Rutas Marítimas", desc: "Plataforma de PromPerú para ver líneas navieras, rutas y tiempos de tránsito marítimo.", tags: "Fletes, PromPerú, Navieras", url: "https://rutasmaritimas.promperu.gob.pe/", icon: "ph-boat" },
+            { id: "t26", cat: "Logística y Tránsito", name: "SeaRates", desc: "Buscador de fletes globales, cálculo de distancias marítimas y rastreo de contenedores.", tags: "Tracking, Contenedores", url: "https://www.searates.com/", icon: "ph-map-pin-line" },
+
+            // 5. Barreras y Aranceles
+            { id: "t27", cat: "Barreras y Aranceles", name: "Access2Markets", desc: "Portal oficial para consultar aranceles, impuestos y requisitos de ingreso a la Unión Europea.", tags: "A2M, UE, Europa, Aranceles", url: "https://trade.ec.europa.eu/", icon: "ph-file-text" },
+            { id: "t28", cat: "Barreras y Aranceles", name: "USITC (DataWeb)", desc: "Sistema oficial para revisar el Arancel de EE.UU. (HTS) y sus estadísticas de importación.", tags: "HTS, USA, Aranceles", url: "https://dataweb.usitc.gov", icon: "ph-flag-banner" },
+            { id: "t29", cat: "Barreras y Aranceles", name: "MACMAP", desc: "Herramienta global para identificar barreras arancelarias y no arancelarias de un mercado.", tags: "Barreras, Aranceles globales", url: "https://www.macmap.org", icon: "ph-wall" },
+            { id: "t30", cat: "Barreras y Aranceles", name: "Standards Map", desc: "Base de datos mundial sobre certificaciones voluntarias y normas de sostenibilidad (ESG).", tags: "Certificaciones, ISO, Orgánico", url: "https://www.standardsmap.org", icon: "ph-seal-check" },
+
+            // 6. Regionales y Promoción
+            { id: "t31", cat: "Regionales y Prom.", name: "Exportemos.pe", desc: "Información e inteligencia comercial para las Américas elaborada por PromPerú.", tags: "PromPerú, Guías mercado", url: "https://exportemos.pe", icon: "ph-compass" },
+            { id: "t32", cat: "Regionales y Prom.", name: "Eurostat", desc: "Oficina estadística de la Unión Europea. Datos macroeconómicos y sociales de la UE.", tags: "Europa, UE, Estadísticas", url: "https://ec.europa.eu/eurostat", icon: "ph-chart-pie-slice" },
+            { id: "t33", cat: "Regionales y Prom.", name: "CBI", desc: "Plataforma que ofrece investigación de mercado para promover exportaciones hacia Europa.", tags: "Europa, Tendencias UE", url: "https://www.cbi.eu", icon: "ph-lightbulb" },
+            { id: "t34", cat: "Regionales y Prom.", name: "US Census Bureau", desc: "Oficina del Censo de EE.UU. Datos fundamentales sobre demografía y economía americana.", tags: "USA, Censo, Demografía", url: "https://www.census.gov", icon: "ph-users" },
+            { id: "t35", cat: "Regionales y Prom.", name: "PROCOMER", desc: "Promotora del Comercio Exterior de Costa Rica. Excelente referente de inteligencia regional.", tags: "Costa Rica, Centroamérica", url: "https://www.procomer.com", icon: "ph-megaphone" },
+            { id: "t36", cat: "Regionales y Prom.", name: "ICEX", desc: "Entidad de España que promueve la exportación e inversiones en el mercado ibérico.", tags: "España, Mercado Ibérico", url: "https://www.icex.es", icon: "ph-push-pin" },
+            { id: "t37", cat: "Regionales y Prom.", name: "APEX Brasil", desc: "Agencia de Promoción de Exportaciones e Inversiones para ingresar al mercado de Brasil.", tags: "Brasil, Sudamérica", url: "https://www.apexbrasil.com.br", icon: "ph-star-four" }
+        ];
+
+        // --- ESTADO Y LOCAL STORAGE ---
+        let state = {
+            view: 'all', 
+            category: 'Todas',
+            search: '',
+            favorites: JSON.parse(localStorage.getItem('adexFavoritos_Eric')) || []
+        };
+
+        const categories = ["Todas", "Información Nacional", "Riesgo y Entorno", "Mercado y Estadísticas", "Logística y Tránsito", "Barreras y Aranceles", "Regionales y Prom."];
+
+        const grid = document.getElementById('tools-grid');
+        const searchInput = document.getElementById('search-input');
+        
+        // --- INICIAR APP ---
+        function init() {
+            renderCategories();
+            updateFavIndicators();
+            renderCards();
+
+            searchInput.addEventListener('input', (e) => {
+                state.search = e.target.value.toLowerCase();
+                renderCards();
+            });
+        }
+
+        // --- RENDERIZAR MENÚS ---
+        function renderCategories() {
+            const dtNav = document.getElementById('dt-category-nav');
+            const mobNav = document.getElementById('mob-category-nav');
+            
+            dtNav.innerHTML = '';
+            mobNav.innerHTML = '';
+
+            categories.forEach(cat => {
+                // Config Iconos
+                let icon = "ph-folder";
+                if(cat==="Todas") icon = "ph-list";
+                if(cat==="Información Nacional") icon = "ph-flag";
+                if(cat==="Riesgo y Entorno") icon = "ph-shield-warning";
+                if(cat==="Mercado y Estadísticas") icon = "ph-chart-bar";
+                if(cat==="Logística y Tránsito") icon = "ph-globe-hemisphere-west";
+                if(cat==="Barreras y Aranceles") icon = "ph-lock-key";
+                if(cat==="Regionales y Prom.") icon = "ph-map-trifold";
+
+                // Desktop Menu
+                const dtBtn = document.createElement('button');
+                dtBtn.className = `w-full text-left px-4 py-3 rounded-xl text-[13px] font-bold transition-all flex items-center gap-3 border ${cat === 'Todas' ? 'bg-white/10 text-white border-white/5 shadow-inner' : 'border-transparent text-blue-200/80 hover:bg-white/5 hover:text-white'}`;
+                dtBtn.id = `dt-cat-${cat.replace(/\s+/g, '-')}`;
+                dtBtn.onclick = () => setCategory(cat);
+                dtBtn.innerHTML = `<i class="${icon} text-xl opacity-90"></i> ${cat}`;
+                dtNav.appendChild(dtBtn);
+
+                // Mobile Menu (Pills)
+                const mobBtn = document.createElement('button');
+                mobBtn.className = `flex-shrink-0 px-4 py-2 rounded-xl text-[13px] font-bold transition-all border ${cat === 'Todas' ? 'bg-adex-darkBlue text-white border-adex-darkBlue shadow-md' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`;
+                mobBtn.id = `mob-cat-${cat.replace(/\s+/g, '-')}`;
+                mobBtn.onclick = () => setCategory(cat);
+                mobBtn.innerHTML = cat;
+                mobNav.appendChild(mobBtn);
+            });
+        }
+
+        // --- NAVEGACIÓN ---
+        function changeView(viewType) {
+            state.view = viewType;
+            state.category = 'Todas'; 
+            state.search = ''; 
+            searchInput.value = '';
+            
+            document.getElementById('view-title').textContent = viewType === 'all' ? "Directorio Global" : "Tus Herramientas Favoritas";
+            document.getElementById('view-desc').textContent = viewType === 'all' ? "Explora las fuentes de inteligencia comercial." : "Acceso rápido a las plataformas que has marcado con estrella.";
+
+            // UI Updates Desktop
+            document.getElementById('dt-btn-all').className = viewType === 'all' ? "w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-adex-blue text-white font-bold transition-all shadow-md" : "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-blue-200 hover:bg-white/5 font-semibold transition-all border border-transparent";
+            document.getElementById('dt-btn-fav').className = viewType === 'favorites' ? "w-full flex items-center justify-between px-4 py-3 rounded-xl bg-yellow-400/10 border border-yellow-400/20 text-yellow-400 font-bold transition-all" : "w-full flex items-center justify-between px-4 py-3 rounded-xl text-blue-200 hover:bg-white/5 font-semibold transition-all group border border-transparent";
+            
+            // UI Updates Mobile
+            document.getElementById('mob-btn-all').className = viewType === 'all' ? "flex flex-col items-center justify-center w-full py-2.5 text-adex-blue font-bold" : "flex flex-col items-center justify-center w-full py-2.5 text-slate-400 font-medium hover:text-slate-800 transition-colors";
+            document.getElementById('mob-btn-fav').className = viewType === 'favorites' ? "flex flex-col items-center justify-center w-full py-2.5 text-yellow-500 font-bold relative" : "flex flex-col items-center justify-center w-full py-2.5 text-slate-400 font-medium hover:text-slate-800 transition-colors relative";
+            document.getElementById('mob-star-icon').className = viewType === 'favorites' ? "ph-fill ph-star text-[26px] mb-1 text-yellow-500" : "ph-fill ph-star text-[26px] mb-1";
+
+            updateCategoryUI('Todas');
+            renderCards();
+        }
+
+        function setCategory(cat) {
+            if(state.view === 'favorites') changeView('all'); 
+            state.category = cat;
+            
+            document.getElementById('view-title').textContent = cat === "Todas" ? "Directorio Global" : cat;
+            document.getElementById('view-desc').textContent = cat === "Todas" ? "Explora las fuentes de inteligencia comercial." : `Filtro aplicado: Herramientas de ${cat}.`;
+
+            updateCategoryUI(cat);
+            renderCards();
+        }
+
+        function updateCategoryUI(cat) {
+            categories.forEach(c => {
+                const idSuffix = c.replace(/\s+/g, '-');
+                const dtBtn = document.getElementById(`dt-cat-${idSuffix}`);
+                const mobBtn = document.getElementById(`mob-cat-${idSuffix}`);
+                
+                if (c === cat) {
+                    if(dtBtn) dtBtn.className = "w-full text-left px-4 py-3 rounded-xl text-[13px] font-bold transition-all flex items-center gap-3 border bg-white/10 text-white border-white/5 shadow-inner";
+                    if(mobBtn) mobBtn.className = "flex-shrink-0 px-4 py-2 rounded-xl text-[13px] font-bold transition-all border bg-adex-darkBlue text-white border-adex-darkBlue shadow-md";
                 } else {
-                    slide.classList.remove('active');
+                    if(dtBtn) dtBtn.className = "w-full text-left px-4 py-3 rounded-xl text-[13px] font-bold transition-all flex items-center gap-3 border border-transparent text-blue-200/80 hover:bg-white/5 hover:text-white";
+                    if(mobBtn) mobBtn.className = "flex-shrink-0 px-4 py-2 rounded-xl text-[13px] font-bold transition-all border bg-white text-slate-600 border-slate-200 hover:bg-slate-50";
                 }
             });
+        }
 
-            // Control de visibilidad del botón "Inicio"
-            if (index === 0) {
-                btnInicio.style.display = 'none';
+        // --- FAVORITOS (LOGICA Y ESTRELLAS) ---
+        function toggleFavorite(id, event) {
+            event.preventDefault(); 
+            const index = state.favorites.indexOf(id);
+            const iconEl = document.getElementById(`star-icon-${id}`);
+
+            if (index > -1) {
+                // Quitar de favoritos
+                state.favorites.splice(index, 1);
+                iconEl.className = "ph-bold ph-star text-[22px] text-slate-300 group-hover:text-yellow-400 transition-colors";
             } else {
-                btnInicio.style.display = 'inline-flex';
+                // Agregar a favoritos
+                state.favorites.push(id);
+                iconEl.className = "ph-fill ph-star text-[22px] text-yellow-400 drop-shadow-sm";
+                iconEl.classList.add('star-animated');
+                setTimeout(() => iconEl.classList.remove('star-animated'), 400);
             }
-
-            // Control de visibilidad del botón "Siguiente"
-            if (index === slides.length - 1) {
-                btnSiguiente.style.display = 'none';
-            } else {
-                btnSiguiente.style.display = 'inline-flex';
-            }
-        }
-
-        function siguienteSlide() {
-            if (currentSlide < slides.length - 1) {
-                currentSlide++;
-                showSlide(currentSlide);
-            }
-        }
-
-        function irInicio() {
-            currentSlide = 0;
-            showSlide(currentSlide);
-        }
-
-        // Lógica del Simulador Interactivo
-        function calcularSimulador() {
-            // Obtener valores
-            let invTotal = parseFloat(document.getElementById('sim_inv').value) || 0;
-            let clientes = parseFloat(document.getElementById('sim_cli').value) || 1; // Prevenir Div/0
-            let pvp = parseFloat(document.getElementById('sim_pvp').value) || 0;
-            let margen = parseFloat(document.getElementById('sim_mar').value) / 100 || 0;
-            let freqMensual = parseFloat(document.getElementById('sim_freq').value) || 0;
-            let meses = 12; // Fijo 1 año
-
-            // Cálculos Matemáticos
-            let cac = invTotal / clientes;
-            let gananciaNetaBolsa = pvp * margen;
-            let clv = (gananciaNetaBolsa * (freqMensual * meses));
             
-            let ingresosMes1 = clientes * freqMensual * gananciaNetaBolsa;
-            let roi = ((ingresosMes1 - invTotal) / invTotal) * 100;
-            let ratio = clv / cac;
-
-            // Pintar en Pantalla
-            document.getElementById('out_cac').innerText = '$' + cac.toFixed(2);
-            document.getElementById('out_clv').innerText = '$' + clv.toFixed(2);
-            document.getElementById('out_roi').innerText = roi.toFixed(1) + '%';
-            document.getElementById('out_ratio').innerText = ratio.toFixed(1) + ' : 1';
-
-            // Lógica Educativa
-            let elRatio = document.getElementById('out_ratio');
-            let eduBox = document.getElementById('edu_box');
-            let eduTitle = document.getElementById('edu_title');
-            let eduDesc = document.getElementById('edu_desc');
-
-            if (ratio >= 3 && roi > 0) {
-                elRatio.style.color = '#2E7D32';
-                eduBox.style.backgroundColor = '#E8F5E9';
-                eduBox.style.borderColor = '#A5D6A7';
-                eduTitle.style.color = '#2E7D32';
-                eduTitle.innerText = "Conclusión Estratégica Teórica: Negocio Escalable";
-                eduDesc.innerHTML = `Según la teoría financiera, un ratio 3:1 es saludable. Nuestro ratio es <span style="font-weight:bold; color:#2E7D32;">${ratio.toFixed(1)}:1</span>. La experiencia del cliente (CX) funciona y retiene al comprador. <strong>Decisión:</strong> Escalar inversión en Redes Sociales.`;
-            } 
-            else if (ratio >= 1 && ratio < 3) {
-                elRatio.style.color = '#EF6C00';
-                eduBox.style.backgroundColor = '#FFF3E0';
-                eduBox.style.borderColor = '#FFCC80';
-                eduTitle.style.color = '#EF6C00';
-                eduTitle.innerText = "Advertencia de Mercado: Margen Estrecho";
-                eduDesc.innerHTML = `Tu ratio es bajo (${ratio.toFixed(1)}:1). Estás gastando demasiado en captar clientes ($${cac.toFixed(2)}) a través del embudo de conversión (CJM). <strong>Recomendación Teórica:</strong> Optimizar la pauta publicitaria y revisar posibles fricciones.`;
-            } 
-            else {
-                elRatio.style.color = '#C62828';
-                eduBox.style.backgroundColor = '#FFEBEE';
-                eduBox.style.borderColor = '#EF9A9A';
-                eduTitle.style.color = '#C62828';
-                eduTitle.innerText = "¡Peligro Financiero! Revisar Customer Journey";
-                eduDesc.innerHTML = `Tu Costo de Adquisición (CAC $${cac.toFixed(2)}) supera al valor de vida del cliente (CLV $${clv.toFixed(2)}). Existen <strong>fricciones severas</strong> en la retención. <strong>Acción urgente:</strong> Detener pauta y analizar la fase de post-compra.`;
-            }
-
-            if (roi < 0 && ratio >= 1) {
-                eduDesc.innerHTML += `<br><br><span style="color:#C62828; font-weight:bold;">Nota sobre el Flujo de Caja:</span> El ROI negativo (${roi.toFixed(1)}%) en el mes 1 advierte que necesitas capital ("espalda financiera" como dicta ADEX) para soportar la fase de captación antes de ser rentable.`;
+            localStorage.setItem('adexFavoritos_Eric', JSON.stringify(state.favorites));
+            updateFavIndicators();
+            
+            if (state.view === 'favorites') {
+                setTimeout(renderCards, 300);
             }
         }
-        
-        // Ejecutar al inicio
-        window.onload = () => {
-            showSlide(currentSlide);
-            calcularSimulador();
-        };
-    </script>
 
+        function updateFavIndicators() {
+            const count = state.favorites.length;
+            
+            // Badge Desktop
+            const dtCounter = document.getElementById('dt-fav-counter');
+            dtCounter.textContent = count;
+            dtCounter.className = count > 0 ? "bg-yellow-400 text-adex-darkBlue text-xs py-1 px-2.5 rounded-full font-black shadow-sm" : "bg-white/10 text-white text-xs py-1 px-2.5 rounded-full font-bold";
+            
+            // Badge Mobile
+            const mobCounter = document.getElementById('mob-fav-counter');
+            mobCounter.textContent = count;
+            if (count > 0) {
+                mobCounter.classList.remove('hidden');
+            } else {
+                mobCounter.classList.add('hidden');
+            }
+        }
+
+        // --- RENDERIZAR TARJETAS ---
+        function renderCards() {
+            grid.innerHTML = '';
+            const emptyState = document.getElementById('empty-state');
+            
+            const filteredData = toolsData.filter(tool => {
+                if (state.view === 'favorites' && !state.favorites.includes(tool.id)) return false;
+                if (state.view === 'all' && state.category !== 'Todas' && tool.cat !== state.category) return false;
+                if (state.search) {
+                    const term = state.search;
+                    return tool.name.toLowerCase().includes(term) || tool.desc.toLowerCase().includes(term) || tool.tags.toLowerCase().includes(term);
+                }
+                return true;
+            });
+
+            document.getElementById('results-count').textContent = `${filteredData.length} resultados`;
+
+            if (filteredData.length === 0) {
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                
+                if (state.view === 'favorites') {
+                    document.getElementById('empty-icon').className = "ph-fill ph-star text-yellow-400 text-6xl drop-shadow-lg";
+                    document.getElementById('empty-title').textContent = "Tu lista está vacía";
+                    document.getElementById('empty-desc').textContent = "Toca la estrella en cualquier herramienta para guardarla aquí.";
+                } else {
+                    document.getElementById('empty-icon').className = "ph-bold ph-magnifying-glass-minus text-slate-300 text-6xl";
+                    document.getElementById('empty-title').textContent = "No hay coincidencias";
+                    document.getElementById('empty-desc').textContent = "Intenta buscar con otra palabra clave como 'Aduanas' o 'TLC'.";
+                }
+                return;
+            }
+
+            grid.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            emptyState.classList.remove('flex');
+
+            filteredData.forEach((tool, i) => {
+                const isFav = state.favorites.includes(tool.id);
+                // Si es favorito, estrella amarilla llena. Si no, estrella gris con borde grueso.
+                const starIcon = isFav ? "ph-fill ph-star text-[22px] text-yellow-400 drop-shadow-sm" : "ph-bold ph-star text-[22px] text-slate-300 group-hover:text-yellow-400 transition-colors";
+
+                const card = document.createElement('div');
+                card.className = "tool-card bg-white rounded-[20px] shadow-card hover:shadow-card-hover border border-slate-200/60 flex flex-col overflow-hidden animate-fade-in relative group";
+                card.style.animationDelay = `${i * 0.03}s`;
+                
+                card.innerHTML = `
+                    <div class="p-5 lg:p-6 flex-grow flex flex-col relative z-10">
+                        
+                        <!-- Header: Icono + Estrella -->
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 flex items-center justify-center text-adex-blue shadow-sm">
+                                <i class="ph-bold ${tool.icon} text-2xl"></i>
+                            </div>
+                            
+                            <!-- Botón de Favorito Interactivo -->
+                            <button id="star-btn-${tool.id}" onclick="toggleFavorite('${tool.id}', event)" class="star-btn p-2 -mr-2 -mt-2 rounded-full hover:bg-slate-50 transition-colors group focus:outline-none z-20" aria-label="Marcar como favorito">
+                                <i id="star-icon-${tool.id}" class="${starIcon}"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Textos -->
+                        <span class="text-[10px] font-black uppercase tracking-widest text-adex-red mb-1.5 block">${tool.cat}</span>
+                        <h3 class="text-[19px] font-black text-slate-900 mb-2 leading-tight">${tool.name}</h3>
+                        <p class="text-[14px] text-slate-500 font-medium leading-relaxed flex-grow">${tool.desc}</p>
+                        
+                        <!-- Etiquetas (Tags) -->
+                        <div class="mt-5 pt-4 border-t border-slate-100 flex flex-wrap gap-1.5">
+                            ${tool.tags.split(', ').map(tag => 
+                                `<span class="bg-slate-100/80 text-slate-600 text-[10px] font-bold px-2.5 py-1 rounded-md border border-slate-200/60">${tag}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    
+                    <!-- Botón de Enlace -->
+                    <a href="${tool.url}" target="_blank" rel="noopener noreferrer" class="bg-slate-50/50 border-t border-slate-100 px-5 lg:px-6 py-4 flex items-center justify-between text-[13px] font-black text-adex-blue hover:bg-adex-blue hover:text-white transition-all duration-300 group/link">
+                        <span>ACCEDER A LA PLATAFORMA</span>
+                        <div class="w-8 h-8 rounded-full bg-white group-hover/link:bg-white/20 flex items-center justify-center transition-colors shadow-sm">
+                            <i class="ph-bold ph-arrow-right group-hover/link:translate-x-0.5 transition-transform"></i>
+                        </div>
+                    </a>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        init();
+    </script>
 </body>
 </html>
