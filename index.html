@@ -33,7 +33,7 @@
         }
     </script>
     
-    <!-- Phosphor Icons (Iconos limpios y modernos) -->
+    <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
@@ -100,12 +100,30 @@
             animation: starPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Efecto tarjeta Offline */
+        /* Efecto tarjeta Offline Rediseñado */
         .card-offline {
-            filter: grayscale(100%) opacity(0.7);
+            background-color: #fef2f2 !important; /* Rojo ultra claro Tailwind */
+            border-color: #fecaca !important;     /* Rojo 200 Tailwind */
+            opacity: 0.95;
         }
         .card-offline:hover {
-            filter: grayscale(50%) opacity(0.9);
+            box-shadow: 0 10px 20px -5px rgba(239, 68, 68, 0.15);
+        }
+        .card-offline h3 {
+            color: #7f1d1d !important; /* Texto rojo oscuro */
+        }
+        .card-offline p {
+            color: #991b1b !important;
+        }
+        .card-offline .icon-bg-offline {
+            background-color: #fee2e2 !important;
+            border-color: #fca5a5 !important;
+            color: #dc2626 !important;
+        }
+        .card-offline .tag-offline {
+            background-color: #fee2e2 !important;
+            border-color: #fca5a5 !important;
+            color: #991b1b !important;
         }
     </style>
 </head>
@@ -124,18 +142,24 @@
                         <span class="text-[11px] font-black text-adex-red uppercase tracking-[0.2em] leading-tight">Escuela</span>
                     </div>
                 </div>
-                <!-- Créditos -->
-                <div class="text-right">
+                <!-- Créditos Interactivos -->
+                <div class="text-right flex flex-col items-end">
                     <p class="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-0.5">Desarrollo</p>
-                    <p class="text-xs font-black text-slate-800 bg-slate-100 px-2.5 py-1 rounded-full border border-slate-200">Eric Mozombite</p>
+                    <button id="dev-credit" onclick="showRealName(this)" class="text-xs font-black text-slate-800 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 transition-all duration-300 active:scale-95 hover:bg-slate-200 cursor-pointer shadow-sm">
+                        RickNET
+                    </button>
                 </div>
             </div>
 
-            <!-- Buscador -->
+            <!-- Buscador con botón X -->
             <div class="relative group">
                 <i class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-adex-blue transition-colors"></i>
                 <input type="text" id="search-box" placeholder="Buscar por herramienta, país, función o siglas (HTS, FOB)..." 
-                    class="w-full bg-slate-100/70 border-2 border-transparent rounded-2xl pl-11 pr-4 py-3.5 text-sm font-semibold text-slate-800 focus:bg-white focus:border-adex-blue/30 focus:ring-4 focus:ring-adex-blue/10 transition-all outline-none placeholder:text-slate-400">
+                    class="w-full bg-slate-100/70 border-2 border-transparent rounded-2xl pl-11 pr-12 py-3.5 text-sm font-semibold text-slate-800 focus:bg-white focus:border-adex-blue/30 focus:ring-4 focus:ring-adex-blue/10 transition-all outline-none placeholder:text-slate-400">
+                <!-- Botón de Limpiar (X) -->
+                <button id="clear-search" onclick="clearSearch()" class="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-slate-200 text-slate-500 rounded-full hover:bg-slate-300 hover:text-slate-800 transition-colors hidden active:scale-90">
+                    <i class="ph-bold ph-x"></i>
+                </button>
             </div>
         </div>
 
@@ -162,7 +186,7 @@
             </div>
 
             <!-- Contenedor de Tarjetas -->
-            <div id="cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div id="cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-start">
                 <!-- Inyectadas por JS -->
             </div>
 
@@ -239,8 +263,10 @@
             { id: "t38", cat: "Mercado y Estadísticas", name: "Statista", desc: "Plataforma global de datos, estadísticas sectoriales e informes de la industria.", tags: ["Estadísticas", "Reportes", "Datos", "Gráficos", "Consumo", "Industria", "Encuestas", "Market research", "Mercado", "B2B", "B2C", "Tendencias", "Statista", "Infografías", "Data analytics", "Estudios de mercado"], url: "https://www.statista.com", icon: "ph-chart-bar" },
             { id: "t39", cat: "Mercado y Estadísticas", name: "Banco Mundial", desc: "Acceso libre a datos sobre el desarrollo mundial e indicadores macroeconómicos.", tags: ["Banco Mundial", "World Bank", "Macroeconomía", "PBI", "PIB", "Inflación", "Pobreza", "Desarrollo", "Indicadores globales", "Población", "Data", "Crecimiento", "Tasa de interés", "Deuda externa"], url: "https://datos.bancomundial.org/", icon: "ph-globe-stand" },
             { id: "t18", cat: "Mercado y Estadísticas", name: "FAO STAT", desc: "Data estadística global sobre agricultura, producción de alimentos y ganadería.", tags: ["FAO", "Alimentos", "Agricultura", "Ganadería", "Producción mundial", "Food", "Agropecuario", "Forestal", "Nutrición", "Hambre", "Suelo", "Cultivos", "Cosechas", "Agronomía"], url: "https://www.fao.org/faostat/", icon: "ph-wheat" },
-            // CIA FACTBOOK Marcado como Offline con `isOffline: true`
+            
+            // CIA FACTBOOK Marcado como Offline con nuevo estilo
             { id: "t19", cat: "Mercado y Estadísticas", name: "CIA Factbook", desc: "Indicadores geográficos, económicos, demográficos y ambientales por país.", tags: ["CIA", "Perfil país", "Geografía", "Demografía global", "Economía", "Factbook", "Población", "Gobierno", "Moneda", "Religión", "Superficie", "Clima", "Offline", "No disponible", "Caído", "Agencia"], url: "https://www.cia.gov/the-world-factbook/", icon: "ph-book-open", isOffline: true },
+            
             { id: "t20", cat: "Mercado y Estadísticas", name: "Euromonitor", desc: "Inteligencia sobre tendencias de mercado, consumo y análisis de competencia.", tags: ["Tendencias", "Retail", "Consumidor", "Market share", "Trends", "FMCG", "Euromonitor", "Investigación", "Reportes", "Marcas", "Canales", "Ventas", "Consumo masivo", "B2C"], url: "https://www.euromonitor.com", icon: "ph-trend-up" },
             { id: "t21", cat: "Mercado y Estadísticas", name: "AUMA Ferias", desc: "Buscador de ferias internacionales con un enfoque técnico y calidad alemana.", tags: ["Ferias", "Eventos", "Alemania", "Trade fairs", "Exhibiciones", "Stands", "AUMA", "B2B", "Pabellones", "Messe", "Tickets", "Expositores", "Congresos técnicos"], url: "https://www.auma.de/en", icon: "ph-ticket" },
             { id: "t22", cat: "Mercado y Estadísticas", name: "nFerias", desc: "Directorio global comercial de exposiciones, congresos y convenciones.", tags: ["Exposiciones", "B2B", "Ferias", "Congresos", "Convenciones", "Networking", "Eventos", "nFerias", "Prospección", "Viajes de negocios", "Calendario", "Stands globales"], url: "https://www.nferias.com", icon: "ph-presentation-chart" },
@@ -285,10 +311,36 @@
             renderGrid();
 
             // Listener del buscador
-            document.getElementById('search-box').addEventListener('input', (e) => {
+            const searchInput = document.getElementById('search-box');
+            const clearBtn = document.getElementById('clear-search');
+            
+            searchInput.addEventListener('input', (e) => {
                 AppState.searchQuery = e.target.value.toLowerCase().trim();
+                if (AppState.searchQuery.length > 0) {
+                    clearBtn.classList.remove('hidden');
+                } else {
+                    clearBtn.classList.add('hidden');
+                }
                 renderGrid();
             });
+        }
+
+        // LÓGICA DE CRÉDITOS
+        function showRealName(btn) {
+            btn.textContent = 'Eric Mozombite';
+            btn.classList.replace('text-slate-800', 'text-adex-blue');
+            btn.classList.replace('bg-slate-100', 'bg-blue-50');
+            btn.classList.replace('border-slate-200', 'border-blue-200');
+        }
+
+        // LÓGICA DE LIMPIEZA DE BÚSQUEDA
+        function clearSearch() {
+            const input = document.getElementById('search-box');
+            input.value = '';
+            AppState.searchQuery = '';
+            document.getElementById('clear-search').classList.add('hidden');
+            renderGrid();
+            input.focus();
         }
 
         // LÓGICA FAB (Botón Flotante)
@@ -358,8 +410,7 @@
         function switchTab(tab) {
             AppState.currentTab = tab;
             AppState.activeCategory = 'Todas';
-            AppState.searchQuery = '';
-            document.getElementById('search-box').value = '';
+            clearSearch();
             
             updateHeaderTexts();
             renderCategoryPills();
@@ -448,13 +499,14 @@
                 
                 // Lógica Visual para Offline
                 const isOffline = tool.isOffline || false;
-                const cardBaseClass = isOffline ? 'card-offline bg-slate-50' : 'bg-white';
+                const cardBaseClass = isOffline ? 'card-offline' : 'bg-white';
                 const offlineBadge = isOffline ? `
-                    <div class="absolute top-4 left-4 bg-red-50 text-red-500 border border-red-100 text-[10px] font-black px-2 py-0.5 rounded-lg uppercase tracking-wider flex items-center gap-1 z-10 shadow-sm">
+                    <div class="absolute top-4 left-4 bg-red-100 text-red-600 border border-red-200 text-[9px] font-black px-2 py-0.5 rounded-lg uppercase tracking-wider flex items-center gap-1 z-10 shadow-sm">
                         <i class="ph-bold ph-warning-circle"></i> Offline
                     </div>
                 ` : '';
 
+                // Eliminada la restricción de altura para permitir que la tarjeta crezca y muestre todos los tags
                 const cardHTML = `
                     <div class="tool-card ${cardBaseClass} rounded-[1.5rem] p-5 shadow-card border border-slate-100 cursor-pointer flex flex-col h-full relative group animate-enter" 
                          style="animation-delay: ${i * 0.03}s"
@@ -469,7 +521,7 @@
 
                         <!-- Cabecera Tarjeta -->
                         <div class="flex items-center gap-3 mb-4 ${isOffline ? 'mt-6' : ''}">
-                            <div class="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-adex-blue group-hover:bg-adex-blue group-hover:text-white transition-colors">
+                            <div class="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-adex-blue group-hover:bg-adex-blue group-hover:text-white transition-colors ${isOffline ? 'icon-bg-offline' : ''}">
                                 <i class="ph-duotone ${tool.icon} text-[28px]"></i>
                             </div>
                             <div class="flex-1 pr-8">
@@ -481,9 +533,9 @@
                         <!-- Descripción -->
                         <p class="text-[13px] text-slate-500 font-medium leading-relaxed flex-grow">${tool.desc}</p>
                         
-                        <!-- Tags -->
-                        <div class="mt-4 pt-4 border-t border-slate-50 flex flex-wrap gap-1.5 overflow-hidden max-h-[60px]">
-                            ${tool.tags.map(t => `<span class="bg-slate-50 text-slate-500 text-[10px] font-bold px-2 py-1 rounded-md border border-slate-100 whitespace-nowrap">${t}</span>`).join('')}
+                        <!-- Tags visibles en su totalidad (flex-wrap) -->
+                        <div class="mt-4 pt-4 border-t border-slate-50 flex flex-wrap gap-1.5 h-auto">
+                            ${tool.tags.map(t => `<span class="bg-slate-50 text-slate-500 text-[10px] font-bold px-2 py-1 rounded-md border border-slate-100 whitespace-nowrap ${isOffline ? 'tag-offline' : ''}">${t}</span>`).join('')}
                         </div>
                     </div>
                 `;
