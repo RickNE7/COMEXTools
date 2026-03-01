@@ -125,14 +125,6 @@
             background-color: #fee2e2 !important;
             border-top-color: #fca5a5 !important;
         }
-        
-        /* Gradiente para ocultar tags */
-        .tags-fade {
-            background: linear-gradient(to top, rgba(248, 250, 252, 1) 10%, rgba(248, 250, 252, 0) 100%);
-        }
-        .card-offline .tags-fade {
-            background: linear-gradient(to top, rgba(254, 226, 226, 1) 10%, rgba(254, 226, 226, 0) 100%);
-        }
     </style>
 </head>
 <body oncontextmenu="return false;" class="text-slate-800 antialiased h-screen flex flex-col">
@@ -153,8 +145,8 @@
                 <!-- Créditos Interactivos -->
                 <div class="text-right flex flex-col items-end">
                     <p class="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-0.5">Desarrollo</p>
-                    <button id="dev-credit" onclick="showRealName(this)" class="text-[11px] font-black text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 transition-all duration-300 active:scale-95 hover:bg-slate-200 cursor-pointer shadow-sm">
-                        Ver Créditos
+                    <button id="dev-credit" onclick="toggleCredits(this)" class="text-[11px] font-black text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 transition-all duration-300 active:scale-95 hover:bg-slate-200 cursor-pointer shadow-sm">
+                        <i class="ph-fill ph-code mr-1"></i> RickNET
                     </button>
                 </div>
             </div>
@@ -272,7 +264,7 @@
             { id: "t39", cat: "Mercado y Estadísticas", name: "Banco Mundial", desc: "Acceso libre a datos sobre el desarrollo mundial e indicadores macroeconómicos.", tags: ["Banco Mundial", "World Bank", "Macroeconomía", "PBI", "PIB", "Inflación", "Pobreza", "Desarrollo", "Indicadores globales", "Población", "Data", "Crecimiento", "Tasa de interés", "Deuda externa"], url: "https://datos.bancomundial.org/", icon: "ph-globe-stand" },
             { id: "t18", cat: "Mercado y Estadísticas", name: "FAO STAT", desc: "Data estadística global sobre agricultura, producción de alimentos y ganadería.", tags: ["FAO", "Alimentos", "Agricultura", "Ganadería", "Producción mundial", "Food", "Agropecuario", "Forestal", "Nutrición", "Hambre", "Suelo", "Cultivos", "Cosechas", "Agronomía"], url: "https://www.fao.org/faostat/", icon: "ph-wheat" },
             
-            // CIA FACTBOOK Marcado como Offline con nuevo estilo
+            // CIA FACTBOOK Marcado como Offline con color indicativo
             { id: "t19", cat: "Mercado y Estadísticas", name: "CIA Factbook", desc: "Indicadores geográficos, económicos, demográficos y ambientales por país.", tags: ["CIA", "Perfil país", "Geografía", "Demografía global", "Economía", "Factbook", "Población", "Gobierno", "Moneda", "Religión", "Superficie", "Clima", "Offline", "No disponible", "Caído", "Agencia"], url: "https://www.cia.gov/the-world-factbook/", icon: "ph-book-open", isOffline: true },
             
             { id: "t20", cat: "Mercado y Estadísticas", name: "Euromonitor", desc: "Inteligencia sobre tendencias de mercado, consumo y análisis de competencia.", tags: ["Tendencias", "Retail", "Consumidor", "Market share", "Trends", "FMCG", "Euromonitor", "Investigación", "Reportes", "Marcas", "Canales", "Ventas", "Consumo masivo", "B2C"], url: "https://www.euromonitor.com", icon: "ph-trend-up" },
@@ -324,7 +316,7 @@
             
             searchInput.addEventListener('input', (e) => {
                 AppState.searchQuery = e.target.value.toLowerCase().trim();
-                if (AppState.searchQuery.length > 0) {
+                if (e.target.value.length > 0) {
                     clearBtn.classList.remove('hidden');
                 } else {
                     clearBtn.classList.add('hidden');
@@ -333,12 +325,19 @@
             });
         }
 
-        // LÓGICA DE CRÉDITOS
-        function showRealName(btn) {
-            btn.innerHTML = '<i class="ph-fill ph-code mr-1"></i> Eric Mozombite';
-            btn.classList.replace('text-slate-500', 'text-adex-blue');
-            btn.classList.replace('bg-slate-100', 'bg-blue-50');
-            btn.classList.replace('border-slate-200', 'border-blue-200');
+        // LÓGICA DE CRÉDITOS TOGGLE
+        function toggleCredits(btn) {
+            if (btn.innerText.includes('RickNET')) {
+                btn.innerHTML = '<i class="ph-fill ph-code mr-1"></i> Eric Mozombite';
+                btn.classList.replace('text-slate-500', 'text-adex-blue');
+                btn.classList.replace('bg-slate-100', 'bg-blue-50');
+                btn.classList.replace('border-slate-200', 'border-blue-200');
+            } else {
+                btn.innerHTML = '<i class="ph-fill ph-code mr-1"></i> RickNET';
+                btn.classList.replace('text-adex-blue', 'text-slate-500');
+                btn.classList.replace('bg-blue-50', 'bg-slate-100');
+                btn.classList.replace('border-blue-200', 'border-slate-200');
+            }
         }
 
         // LÓGICA DE LIMPIEZA DE BÚSQUEDA
@@ -371,31 +370,6 @@
                 icon.classList.remove('ph-x', 'rotate-90');
                 icon.classList.add('ph-list');
                 setTimeout(() => menu.classList.add('hidden'), 300);
-            }
-        }
-
-        // LÓGICA EXPANSIÓN DE TAGS
-        function toggleTags(event, el) {
-            event.stopPropagation(); // Evita que abra el enlace de la tarjeta
-            const container = el.querySelector('.tags-container');
-            const fade = el.querySelector('.tags-fade');
-            const text = el.querySelector('.expand-text');
-            const icon = el.querySelector('.expand-icon');
-            
-            if (container.classList.contains('h-[28px]')) {
-                // Expandir
-                container.classList.remove('h-[28px]', 'overflow-hidden');
-                container.classList.add('h-auto');
-                if(fade) fade.classList.add('hidden');
-                text.textContent = 'Ocultar palabras';
-                icon.classList.replace('ph-caret-down', 'ph-caret-up');
-            } else {
-                // Contraer
-                container.classList.add('h-[28px]', 'overflow-hidden');
-                container.classList.remove('h-auto');
-                if(fade) fade.classList.remove('hidden');
-                text.textContent = 'Ver todas las palabras clave';
-                icon.classList.replace('ph-caret-up', 'ph-caret-down');
             }
         }
 
@@ -538,7 +512,7 @@
                     </div>
                 ` : '';
 
-                // El diseño separa el área principal (link web) del área inferior (desplegable de tags)
+                // El diseño separa el área principal (link web) del área inferior donde las etiquetas son SIEMPRE visibles (sin altura limitada)
                 const cardHTML = `
                     <div class="tool-card ${cardBaseClass} rounded-[1.5rem] shadow-card border border-slate-100 flex flex-col h-full relative group animate-enter overflow-hidden" 
                          style="animation-delay: ${i * 0.03}s">
@@ -550,7 +524,7 @@
                             <i class="${starClass}"></i>
                         </button>
 
-                        <!-- Área Superior: Lleva a la web -->
+                        <!-- Área Superior: Lleva a la web al tocar -->
                         <div class="p-5 pb-4 cursor-pointer flex-grow relative z-10" onclick="window.open('${tool.url}', '_blank')">
                             <!-- Cabecera Tarjeta -->
                             <div class="flex items-center gap-3 mb-4 ${isOffline ? 'mt-6' : ''}">
@@ -567,20 +541,11 @@
                             <p class="text-[13px] text-slate-500 font-medium leading-relaxed">${tool.desc}</p>
                         </div>
 
-                        <!-- Área Inferior: Despliegue de Tags -->
-                        <div class="tags-section px-5 pb-3 pt-3 border-t border-slate-50 cursor-pointer bg-slate-50/50 hover:bg-slate-100 transition-colors relative z-10" onclick="toggleTags(event, this)">
-                            <div class="relative">
-                                <!-- Contenedor de Tags (Fijado a 1 línea por defecto) -->
-                                <div class="tags-container flex flex-wrap gap-1.5 h-[28px] overflow-hidden transition-all duration-300">
-                                    ${tool.tags.map(t => `<span class="bg-white text-slate-500 text-[10px] font-bold px-2.5 py-1 rounded-md border border-slate-200 whitespace-nowrap ${isOffline ? 'tag-offline' : ''} shadow-sm">${t}</span>`).join('')}
-                                </div>
-                                <!-- Gradiente de ocultamiento -->
-                                <div class="tags-fade absolute bottom-0 right-0 w-12 h-full z-10 pointer-events-none"></div>
-                            </div>
-                            
-                            <div class="flex items-center justify-center gap-1 mt-2.5 text-slate-400 hover:text-adex-blue transition-colors">
-                                <span class="text-[9px] font-black uppercase tracking-widest expand-text">Ver todas las palabras clave</span>
-                                <i class="ph-bold ph-caret-down expand-icon text-xs"></i>
+                        <!-- Área Inferior: Todas las etiquetas son visibles de inmediato -->
+                        <div class="tags-section px-5 pb-5 pt-3 border-t border-slate-50 bg-slate-50/50 relative z-10">
+                            <!-- Contenedor de Tags (Flex wrap y altura automática) -->
+                            <div class="tags-container flex flex-wrap gap-1.5 h-auto">
+                                ${tool.tags.map(t => `<span class="bg-white text-slate-500 text-[10px] font-bold px-2.5 py-1 rounded-md border border-slate-200 whitespace-nowrap ${isOffline ? 'tag-offline' : ''} shadow-sm">${t}</span>`).join('')}
                             </div>
                         </div>
 
