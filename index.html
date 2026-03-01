@@ -133,7 +133,7 @@
             <!-- Buscador -->
             <div class="relative group">
                 <i class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-adex-blue transition-colors"></i>
-                <input type="text" id="search-box" placeholder="Buscar herramienta, país o función..." 
+                <input type="text" id="search-box" placeholder="Buscar por herramienta, país, siglas (FOB, TLC, HTS)..." 
                     class="w-full bg-slate-100/70 border-2 border-transparent rounded-2xl pl-11 pr-4 py-3.5 text-sm font-semibold text-slate-800 focus:bg-white focus:border-adex-blue/30 focus:ring-4 focus:ring-adex-blue/10 transition-all outline-none placeholder:text-slate-400">
             </div>
         </div>
@@ -215,57 +215,57 @@
 
     <!-- LÓGICA DE DATOS Y RENDERIZADO -->
     <script>
-        // DATA: Las 37 herramientas organizadas
+        // DATA: Las 38 herramientas con palabras clave (tags) amplificadas
         const toolsData = [
             // 1. Nacional (Perú)
-            { id: "t1", cat: "Nacional (Perú)", name: "SUNAT", desc: "Verifica formalidad de empresas (Consulta RUC), exportadoras y operatividad aduanera.", tags: ["RUC", "Aduanas"], url: "https://e-consultaruc.sunat.gob.pe/", icon: "ph-buildings" },
-            { id: "t2", cat: "Nacional (Perú)", name: "INEI", desc: "Zonas de producción, Producción Nacional y censos demográficos.", tags: ["Censo", "PBI"], url: "https://www.gob.pe/inei", icon: "ph-chart-pie-slice" },
-            { id: "t3", cat: "Nacional (Perú)", name: "SIEA MIDAGRI", desc: "Calendario de producción agrícola y estadísticas del sector agrario.", tags: ["Agro", "Cosecha"], url: "https://siea.midagri.gob.pe/portal/", icon: "ph-plant" },
-            { id: "t4", cat: "Nacional (Perú)", name: "Catálogo MIDAGRI", desc: "Directorio oficial de proveedores y productores agrarios a nivel nacional.", tags: ["Proveedores", "Agro"], url: "https://catalogo.midagri.gob.pe/", icon: "ph-address-book" },
-            { id: "t5", cat: "Nacional (Perú)", name: "PRODUCE", desc: "Datos de producción marina (pesca y acuicultura) e industrial.", tags: ["Pesca", "Industria"], url: "https://ogeiee.produce.gob.pe", icon: "ph-factory" },
-            { id: "t6", cat: "Nacional (Perú)", name: "SERFOR", desc: "Estadísticas sobre hierbas, flora, fauna silvestre y productos forestales.", tags: ["Madera", "Flora"], url: "https://sniffs.serfor.gob.pe", icon: "ph-tree" },
-            { id: "t7", cat: "Nacional (Perú)", name: "ADT (ADEX)", desc: "Importaciones y exportaciones peruanas detalladas por puerto y aduana.", tags: ["ADEX", "Puertos"], url: "https://www.adexdatatrade.com", icon: "ph-chart-line-up" },
-            { id: "t8", cat: "Nacional (Perú)", name: "Veritrade", desc: "Inteligencia comercial y búsqueda directa de empresas importadoras/exportadoras.", tags: ["Competencia", "Empresas"], url: "https://www.veritradecorp.com", icon: "ph-detective" },
-            { id: "t9", cat: "Nacional (Perú)", name: "Acuerdos Comerciales", desc: "Portal oficial de los TLCs y acuerdos comerciales vigentes del Perú.", tags: ["TLC", "Convenios"], url: "https://www.acuerdoscomerciales.gob.pe", icon: "ph-handshake" },
-            { id: "t10", cat: "Nacional (Perú)", name: "Tu Mercado Perú", desc: "Directorio de PROMPERÚ que conecta oferta regional con compradores globales.", tags: ["PromPerú", "B2B"], url: "https://www.tumercadoperu.com", icon: "ph-storefront" },
+            { id: "t1", cat: "Nacional (Perú)", name: "SUNAT", desc: "Verifica formalidad de empresas (Consulta RUC), exportadoras y operatividad aduanera.", tags: ["RUC", "Aduanas", "Formalidad", "Exportadoras", "Importadoras", "Tributos", "Impuestos", "DUA", "Operatividad"], url: "https://e-consultaruc.sunat.gob.pe/", icon: "ph-buildings" },
+            { id: "t2", cat: "Nacional (Perú)", name: "INEI", desc: "Zonas de producción, Producción Nacional y censos demográficos.", tags: ["Censo", "PBI", "Demografía", "Producción Nacional", "Regiones", "Zonas", "Población"], url: "https://www.gob.pe/inei", icon: "ph-chart-pie-slice" },
+            { id: "t3", cat: "Nacional (Perú)", name: "SIEA MIDAGRI", desc: "Calendario de producción agrícola y estadísticas del sector agrario.", tags: ["Agro", "Cosecha", "Siembra", "Agrícola", "Agricultura", "Calendario", "Precios", "Clima"], url: "https://siea.midagri.gob.pe/portal/", icon: "ph-plant" },
+            { id: "t4", cat: "Nacional (Perú)", name: "Catálogo MIDAGRI", desc: "Directorio oficial de proveedores y productores agrarios a nivel nacional.", tags: ["Proveedores", "Agro", "Directorio", "Productores", "Agricultores", "B2B", "Contactos"], url: "https://catalogo.midagri.gob.pe/", icon: "ph-address-book" },
+            { id: "t5", cat: "Nacional (Perú)", name: "PRODUCE", desc: "Datos de producción marina (pesca y acuicultura) e industrial.", tags: ["Pesca", "Industria", "Acuicultura", "Manufactura", "Producción Marina", "Fábricas"], url: "https://ogeiee.produce.gob.pe", icon: "ph-factory" },
+            { id: "t6", cat: "Nacional (Perú)", name: "SERFOR", desc: "Estadísticas sobre hierbas, flora, fauna silvestre y productos forestales.", tags: ["Madera", "Flora", "Fauna", "Forestal", "Hierbas", "Silvestre", "Tala"], url: "https://sniffs.serfor.gob.pe", icon: "ph-tree" },
+            { id: "t7", cat: "Nacional (Perú)", name: "ADT (ADEX)", desc: "Importaciones y exportaciones peruanas detalladas por puerto y aduana.", tags: ["ADEX", "Puertos", "FOB", "CIF", "Data Trade", "Partida", "Marítimo"], url: "https://www.adexdatatrade.com", icon: "ph-chart-line-up" },
+            { id: "t8", cat: "Nacional (Perú)", name: "Veritrade", desc: "Inteligencia comercial y búsqueda directa de empresas importadoras/exportadoras.", tags: ["Competencia", "Empresas", "Importadores", "Exportadores", "Manifiestos", "Mercados", "B2B"], url: "https://www.veritradecorp.com", icon: "ph-detective" },
+            { id: "t9", cat: "Nacional (Perú)", name: "Acuerdos Comerciales", desc: "Portal oficial de los TLCs y acuerdos comerciales vigentes del Perú.", tags: ["TLC", "Convenios", "MINCETUR", "Tratados", "Preferencias", "Aranceles", "Negociación"], url: "https://www.acuerdoscomerciales.gob.pe", icon: "ph-handshake" },
+            { id: "t10", cat: "Nacional (Perú)", name: "Tu Mercado Perú", desc: "Directorio de PROMPERÚ que conecta oferta regional con compradores globales.", tags: ["PromPerú", "B2B", "Vitrina", "Productores", "Regiones", "Oferta exportable"], url: "https://www.tumercadoperu.com", icon: "ph-storefront" },
             
             // 2. Riesgo y Entorno
-            { id: "t11", cat: "Riesgo y Entorno", name: "EPI Yale", desc: "Índice de Desempeño Ambiental. Evalúa la sostenibilidad ecológica por país.", tags: ["Medio Ambiente", "EPI"], url: "https://epi.yale.edu/measure/2024/EPI", icon: "ph-leaf" },
-            { id: "t12", cat: "Riesgo y Entorno", name: "Transparency Int.", desc: "Índice de Percepción de la Corrupción. Mide riesgo ético e institucional.", tags: ["Corrupción", "Ética"], url: "https://www.transparency.org/en/cpi/2025", icon: "ph-scales" },
-            { id: "t13", cat: "Riesgo y Entorno", name: "Doing Business", desc: "Ranking del Banco Mundial sobre facilidad de negocios y regulaciones.", tags: ["Trámites", "Inversión"], url: "https://archive.doingbusiness.org/es/rankings", icon: "ph-briefcase" },
-            { id: "t14", cat: "Riesgo y Entorno", name: "COFACE", desc: "Análisis macroeconómico, insights y mapas de evaluación de riesgo país.", tags: ["Riesgo País", "Impago"], url: "https://www.coface.com.pe", icon: "ph-warning-circle" },
-            { id: "t15", cat: "Riesgo y Entorno", name: "CESCE", desc: "Gestión de seguros de crédito a la exportación e información de riesgo.", tags: ["Seguros", "Crédito"], url: "https://www.cesce.es", icon: "ph-shield-check" },
-            { id: "t16", cat: "Riesgo y Entorno", name: "CIAL D&B", desc: "Software financiero para evaluar solvencia y riesgo en transacciones B2B.", tags: ["Solvencia", "D&B"], url: "https://www.cialdnb.com", icon: "ph-bank" },
+            { id: "t11", cat: "Riesgo y Entorno", name: "EPI Yale", desc: "Índice de Desempeño Ambiental. Evalúa la sostenibilidad ecológica por país.", tags: ["Medio Ambiente", "EPI", "Sostenibilidad", "Ecología", "ESG", "Clima", "Yale", "Environment"], url: "https://epi.yale.edu/measure/2024/EPI", icon: "ph-leaf" },
+            { id: "t12", cat: "Riesgo y Entorno", name: "Transparency Int.", desc: "Índice de Percepción de la Corrupción. Mide riesgo ético e institucional.", tags: ["Corrupción", "Ética", "CPI", "Transparencia", "Riesgo político", "Institucional", "Governance"], url: "https://www.transparency.org/en/cpi/2025", icon: "ph-scales" },
+            { id: "t13", cat: "Riesgo y Entorno", name: "Doing Business", desc: "Ranking del Banco Mundial sobre facilidad de negocios y regulaciones.", tags: ["Trámites", "Inversión", "Banco Mundial", "Clima de negocios", "Regulaciones", "Permisos", "Empresa"], url: "https://archive.doingbusiness.org/es/rankings", icon: "ph-briefcase" },
+            { id: "t14", cat: "Riesgo y Entorno", name: "COFACE", desc: "Análisis macroeconómico, insights y mapas de evaluación de riesgo país.", tags: ["Riesgo País", "Impago", "Country Risk", "Economía", "Macro", "Seguridad"], url: "https://www.coface.com.pe", icon: "ph-warning-circle" },
+            { id: "t15", cat: "Riesgo y Entorno", name: "CESCE", desc: "Gestión de seguros de crédito a la exportación e información de riesgo.", tags: ["Seguros", "Crédito", "Pólizas", "Riesgo comercial", "Exportación", "Cobertura"], url: "https://www.cesce.es", icon: "ph-shield-check" },
+            { id: "t16", cat: "Riesgo y Entorno", name: "CIAL D&B", desc: "Software financiero para evaluar solvencia y riesgo en transacciones B2B.", tags: ["Solvencia", "D&B", "Dun & Bradstreet", "Riesgo B2B", "Central de riesgo", "Finanzas"], url: "https://www.cialdnb.com", icon: "ph-bank" },
 
             // 3. Mercado y Estadísticas
-            { id: "t17", cat: "Mercado y Estadísticas", name: "Trade Map", desc: "Filtra flujos de importación y exportación a nivel mundial por partida arancelaria.", tags: ["Flujos", "Competencia"], url: "https://www.trademap.org", icon: "ph-globe-hemisphere-east" },
-            { id: "t18", cat: "Mercado y Estadísticas", name: "FAO STAT", desc: "Data estadística global sobre agricultura, producción de alimentos y ganadería.", tags: ["FAO", "Alimentos"], url: "https://www.fao.org/faostat/", icon: "ph-wheat" },
-            { id: "t19", cat: "Mercado y Estadísticas", name: "CIA Factbook", desc: "Indicadores geográficos, económicos, demográficos y ambientales por país.", tags: ["CIA", "Perfil país"], url: "https://www.cia.gov/the-world-factbook/", icon: "ph-book-open" },
-            { id: "t20", cat: "Mercado y Estadísticas", name: "Euromonitor", desc: "Inteligencia sobre tendencias de mercado, consumo y análisis de competencia.", tags: ["Tendencias", "Retail"], url: "https://www.euromonitor.com", icon: "ph-trend-up" },
-            { id: "t21", cat: "Mercado y Estadísticas", name: "AUMA Ferias", desc: "Buscador de ferias internacionales con un enfoque técnico y calidad alemana.", tags: ["Ferias", "Eventos"], url: "https://www.auma.de/en", icon: "ph-ticket" },
-            { id: "t22", cat: "Mercado y Estadísticas", name: "nFerias", desc: "Directorio global comercial de exposiciones, congresos y convenciones.", tags: ["Exposiciones", "B2B"], url: "https://www.nferias.com", icon: "ph-presentation-chart" },
-            { id: "t23", cat: "Mercado y Estadísticas", name: "INEI Mundial", desc: "Directorio oficial con enlaces a los institutos de estadística de 195 países.", tags: ["Censos", "Directorio"], url: "https://www.gob.pe/14796", icon: "ph-list-numbers" },
-            { id: "t38", cat: "Mercado y Estadísticas", name: "Statista", desc: "Plataforma global de datos, estadísticas sectoriales e informes sobre diversas industrias y tendencias de consumo.", tags: ["Estadísticas", "Reportes", "Datos"], url: "https://www.statista.com", icon: "ph-chart-bar" },
+            { id: "t17", cat: "Mercado y Estadísticas", name: "Trade Map", desc: "Filtra flujos de importación y exportación a nivel mundial por partida arancelaria.", tags: ["Flujos", "Competencia", "ITC", "Partida", "HS Code", "Trade statistics"], url: "https://www.trademap.org", icon: "ph-globe-hemisphere-east" },
+            { id: "t38", cat: "Mercado y Estadísticas", name: "Statista", desc: "Plataforma global de datos, estadísticas sectoriales e informes sobre diversas industrias y tendencias.", tags: ["Estadísticas", "Reportes", "Datos", "Gráficos", "Consumo", "Industria", "Encuestas", "Market research"], url: "https://www.statista.com", icon: "ph-chart-bar" },
+            { id: "t18", cat: "Mercado y Estadísticas", name: "FAO STAT", desc: "Data estadística global sobre agricultura, producción de alimentos y ganadería.", tags: ["FAO", "Alimentos", "Agricultura", "Ganadería", "Producción mundial", "Food"], url: "https://www.fao.org/faostat/", icon: "ph-wheat" },
+            { id: "t19", cat: "Mercado y Estadísticas", name: "CIA Factbook", desc: "Indicadores geográficos, económicos, demográficos y ambientales por país.", tags: ["CIA", "Perfil país", "Geografía", "Demografía global", "Economía", "Factbook"], url: "https://www.cia.gov/the-world-factbook/", icon: "ph-book-open" },
+            { id: "t20", cat: "Mercado y Estadísticas", name: "Euromonitor", desc: "Inteligencia sobre tendencias de mercado, consumo y análisis de competencia.", tags: ["Tendencias", "Retail", "Consumidor", "Market share", "Trends", "FMCG"], url: "https://www.euromonitor.com", icon: "ph-trend-up" },
+            { id: "t21", cat: "Mercado y Estadísticas", name: "AUMA Ferias", desc: "Buscador de ferias internacionales con un enfoque técnico y calidad alemana.", tags: ["Ferias", "Eventos", "Alemania", "Trade fairs", "Exhibiciones", "Stands"], url: "https://www.auma.de/en", icon: "ph-ticket" },
+            { id: "t22", cat: "Mercado y Estadísticas", name: "nFerias", desc: "Directorio global comercial de exposiciones, congresos y convenciones.", tags: ["Exposiciones", "B2B", "Ferias", "Congresos", "Convenciones", "Networking"], url: "https://www.nferias.com", icon: "ph-presentation-chart" },
+            { id: "t23", cat: "Mercado y Estadísticas", name: "INEI Mundial", desc: "Directorio oficial con enlaces a los institutos de estadística de 195 países.", tags: ["Censos", "Directorio", "Estadística global", "14796", "Población mundial"], url: "https://www.gob.pe/14796", icon: "ph-list-numbers" },
 
             // 4. Logística y Tránsito
-            { id: "t24", cat: "Logística y Tránsito", name: "LPI (Banco Mundial)", desc: "Índice de Desempeño Logístico. Evalúa aduanas, envíos e infraestructura.", tags: ["LPI", "Aduanas"], url: "https://lpi.worldbank.org/international/global", icon: "ph-truck" },
-            { id: "t25", cat: "Logística y Tránsito", name: "Rutas Marítimas", desc: "Calcula líneas navieras, rutas directas y tiempos de tránsito desde Perú.", tags: ["Fletes", "Navieras"], url: "https://rutasmaritimas.promperu.gob.pe/", icon: "ph-boat" },
-            { id: "t26", cat: "Logística y Tránsito", name: "SeaRates", desc: "Buscador de fletes globales, distancias y rastreo de contenedores en vivo.", tags: ["Tracking", "Rutas"], url: "https://www.searates.com/", icon: "ph-map-pin-line" },
+            { id: "t24", cat: "Logística y Tránsito", name: "LPI (Banco Mundial)", desc: "Índice de Desempeño Logístico. Evalúa aduanas, envíos e infraestructura.", tags: ["LPI", "Aduanas", "Logística", "Infraestructura", "Desempeño", "Tracking"], url: "https://lpi.worldbank.org/international/global", icon: "ph-truck" },
+            { id: "t25", cat: "Logística y Tránsito", name: "Rutas Marítimas", desc: "Calcula líneas navieras, rutas directas y tiempos de tránsito desde Perú.", tags: ["Fletes", "Navieras", "PromPerú", "Tiempos de tránsito", "Callao", "Shipping"], url: "https://rutasmaritimas.promperu.gob.pe/", icon: "ph-boat" },
+            { id: "t26", cat: "Logística y Tránsito", name: "SeaRates", desc: "Buscador de fletes globales, distancias y rastreo de contenedores en vivo.", tags: ["Tracking", "Rutas", "Contenedores", "Distancias", "Fletes", "Transit time", "Freight"], url: "https://www.searates.com/", icon: "ph-map-pin-line" },
 
             // 5. Barreras y Aranceles
-            { id: "t27", cat: "Barreras y Aranceles", name: "Access2Markets", desc: "Calcula aranceles, impuestos y requisitos para ingresar a la Unión Europea.", tags: ["UE", "Aranceles"], url: "https://trade.ec.europa.eu/", icon: "ph-file-text" },
-            { id: "t28", cat: "Barreras y Aranceles", name: "USITC (DataWeb)", desc: "Sistema oficial para revisar el Arancel de EE.UU. (HTS) y estadísticas.", tags: ["HTS", "USA"], url: "https://dataweb.usitc.gov", icon: "ph-flag-banner" },
-            { id: "t29", cat: "Barreras y Aranceles", name: "MACMAP", desc: "Herramienta ITC para identificar barreras arancelarias y no arancelarias.", tags: ["Barreras", "Restricciones"], url: "https://www.macmap.org", icon: "ph-wall" },
-            { id: "t30", cat: "Barreras y Aranceles", name: "Standards Map", desc: "Base de datos internacional de certificaciones voluntarias y normas ESG.", tags: ["Certificaciones", "ISO"], url: "https://www.standardsmap.org", icon: "ph-seal-check" },
+            { id: "t27", cat: "Barreras y Aranceles", name: "Access2Markets", desc: "Calcula aranceles, impuestos y requisitos para ingresar a la Unión Europea.", tags: ["UE", "Aranceles", "Europa", "Impuestos", "Requisitos", "Normas de origen", "Duties"], url: "https://trade.ec.europa.eu/", icon: "ph-file-text" },
+            { id: "t28", cat: "Barreras y Aranceles", name: "USITC (DataWeb)", desc: "Sistema oficial para revisar el Arancel de EE.UU. (HTS) y estadísticas.", tags: ["HTS", "USA", "EE.UU.", "Aranceles", "Tariffs", "Aduana americana", "DataWeb"], url: "https://dataweb.usitc.gov", icon: "ph-flag-banner" },
+            { id: "t29", cat: "Barreras y Aranceles", name: "MACMAP", desc: "Herramienta ITC para identificar barreras arancelarias y no arancelarias.", tags: ["Barreras", "Restricciones", "ITC", "Aranceles globales", "Market access", "NTM", "Cuotas"], url: "https://www.macmap.org", icon: "ph-wall" },
+            { id: "t30", cat: "Barreras y Aranceles", name: "Standards Map", desc: "Base de datos internacional de certificaciones voluntarias y normas ESG.", tags: ["Certificaciones", "ISO", "Orgánico", "Fairtrade", "ESG", "Sostenibilidad", "Normas", "Voluntarias"], url: "https://www.standardsmap.org", icon: "ph-seal-check" },
 
             // 6. Fuentes Regionales
-            { id: "t31", cat: "Fuentes Regionales", name: "Exportemos.pe", desc: "Inteligencia comercial elaborada por PromPerú para las Américas.", tags: ["PromPerú", "LATAM"], url: "https://exportemos.pe", icon: "ph-compass" },
-            { id: "t32", cat: "Fuentes Regionales", name: "Eurostat", desc: "Base de datos macroeconómicos y sociales oficiales de la Unión Europea.", tags: ["UE", "Estadísticas"], url: "https://ec.europa.eu/eurostat", icon: "ph-chart-pie-slice" },
-            { id: "t33", cat: "Fuentes Regionales", name: "CBI Europe", desc: "Investigación de mercado especializada para exportar hacia Europa.", tags: ["Europa", "Tendencias"], url: "https://www.cbi.eu", icon: "ph-lightbulb" },
-            { id: "t34", cat: "Fuentes Regionales", name: "US Census Bureau", desc: "Datos oficiales sobre la economía y demografía de los Estados Unidos.", tags: ["USA", "Censo"], url: "https://www.census.gov", icon: "ph-users" },
-            { id: "t35", cat: "Fuentes Regionales", name: "PROCOMER", desc: "Promotora del Comercio Exterior de Costa Rica para Centroamérica.", tags: ["Costa Rica", "Promo"], url: "https://www.procomer.com", icon: "ph-megaphone" },
-            { id: "t36", cat: "Fuentes Regionales", name: "ICEX España", desc: "Entidad pública que promueve la exportación en el mercado español.", tags: ["España", "Inversión"], url: "https://www.icex.es", icon: "ph-push-pin" },
-            { id: "t37", cat: "Fuentes Regionales", name: "APEX Brasil", desc: "Agencia de Promoción de Exportaciones e Inversiones de Brasil.", tags: ["Brasil", "Mercado"], url: "https://www.apexbrasil.com.br", icon: "ph-star-four" }
+            { id: "t31", cat: "Fuentes Regionales", name: "Exportemos.pe", desc: "Inteligencia comercial elaborada por PromPerú para las Américas.", tags: ["PromPerú", "LATAM", "Perfiles", "Guías", "Américas", "Inteligencia"], url: "https://exportemos.pe", icon: "ph-compass" },
+            { id: "t32", cat: "Fuentes Regionales", name: "Eurostat", desc: "Base de datos macroeconómicos y sociales oficiales de la Unión Europea.", tags: ["UE", "Estadísticas", "Europa", "Macroeconomía", "EU statistics"], url: "https://ec.europa.eu/eurostat", icon: "ph-chart-pie-slice" },
+            { id: "t33", cat: "Fuentes Regionales", name: "CBI Europe", desc: "Investigación de mercado especializada para exportar hacia Europa.", tags: ["Europa", "Tendencias", "Requisitos UE", "Oportunidades"], url: "https://www.cbi.eu", icon: "ph-lightbulb" },
+            { id: "t34", cat: "Fuentes Regionales", name: "US Census Bureau", desc: "Datos oficiales sobre la economía y demografía de los Estados Unidos.", tags: ["USA", "Censo", "Demografía EE.UU.", "Población", "Economía americana"], url: "https://www.census.gov", icon: "ph-users" },
+            { id: "t35", cat: "Fuentes Regionales", name: "PROCOMER", desc: "Promotora del Comercio Exterior de Costa Rica para Centroamérica.", tags: ["Costa Rica", "Promo", "Centroamérica", "Inteligencia", "Exportación"], url: "https://www.procomer.com", icon: "ph-megaphone" },
+            { id: "t36", cat: "Fuentes Regionales", name: "ICEX España", desc: "Entidad pública que promueve la exportación en el mercado español.", tags: ["España", "Inversión", "Mercado ibérico", "Europa", "Exportación"], url: "https://www.icex.es", icon: "ph-push-pin" },
+            { id: "t37", cat: "Fuentes Regionales", name: "APEX Brasil", desc: "Agencia de Promoción de Exportaciones e Inversiones de Brasil.", tags: ["Brasil", "Mercado", "Sudamérica", "Inversiones", "Exportación"], url: "https://www.apexbrasil.com.br", icon: "ph-star-four" }
         ];
 
         // ESTADO DE LA APP
@@ -473,9 +473,9 @@
                         <!-- Descripción -->
                         <p class="text-[13px] text-slate-500 font-medium leading-relaxed flex-grow">${tool.desc}</p>
                         
-                        <!-- Tags -->
-                        <div class="mt-4 pt-4 border-t border-slate-50 flex flex-wrap gap-1.5">
-                            ${tool.tags.map(t => `<span class="bg-slate-50 text-slate-500 text-[10px] font-bold px-2 py-1 rounded-md border border-slate-100">${t}</span>`).join('')}
+                        <!-- Tags (Mostrando los primeros 3-4 visibles para no saturar visualmente la tarjeta, pero todos funcionan en la búsqueda) -->
+                        <div class="mt-4 pt-4 border-t border-slate-50 flex flex-wrap gap-1.5 overflow-hidden max-h-[60px]">
+                            ${tool.tags.map(t => `<span class="bg-slate-50 text-slate-500 text-[10px] font-bold px-2 py-1 rounded-md border border-slate-100 whitespace-nowrap">${t}</span>`).join('')}
                         </div>
                     </div>
                 `;
