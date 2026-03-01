@@ -77,9 +77,6 @@
         .tool-card {
             transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s, filter 0.3s;
         }
-        .tool-card:active {
-            transform: scale(0.97);
-        }
         
         /* Animación de entrada fluida */
         @keyframes fadeUp {
@@ -102,15 +99,14 @@
 
         /* Efecto tarjeta Offline Rediseñado */
         .card-offline {
-            background-color: #fef2f2 !important; /* Rojo ultra claro Tailwind */
-            border-color: #fecaca !important;     /* Rojo 200 Tailwind */
-            opacity: 0.95;
+            background-color: #fef2f2 !important; 
+            border-color: #fecaca !important;     
         }
         .card-offline:hover {
             box-shadow: 0 10px 20px -5px rgba(239, 68, 68, 0.15);
         }
         .card-offline h3 {
-            color: #7f1d1d !important; /* Texto rojo oscuro */
+            color: #7f1d1d !important; 
         }
         .card-offline p {
             color: #991b1b !important;
@@ -121,9 +117,21 @@
             color: #dc2626 !important;
         }
         .card-offline .tag-offline {
-            background-color: #fee2e2 !important;
+            background-color: #fef2f2 !important;
             border-color: #fca5a5 !important;
             color: #991b1b !important;
+        }
+        .card-offline .tags-section {
+            background-color: #fee2e2 !important;
+            border-top-color: #fca5a5 !important;
+        }
+        
+        /* Gradiente para ocultar tags */
+        .tags-fade {
+            background: linear-gradient(to top, rgba(248, 250, 252, 1) 10%, rgba(248, 250, 252, 0) 100%);
+        }
+        .card-offline .tags-fade {
+            background: linear-gradient(to top, rgba(254, 226, 226, 1) 10%, rgba(254, 226, 226, 0) 100%);
         }
     </style>
 </head>
@@ -145,8 +153,8 @@
                 <!-- Créditos Interactivos -->
                 <div class="text-right flex flex-col items-end">
                     <p class="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-0.5">Desarrollo</p>
-                    <button id="dev-credit" onclick="showRealName(this)" class="text-xs font-black text-slate-800 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 transition-all duration-300 active:scale-95 hover:bg-slate-200 cursor-pointer shadow-sm">
-                        RickNET
+                    <button id="dev-credit" onclick="showRealName(this)" class="text-[11px] font-black text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 transition-all duration-300 active:scale-95 hover:bg-slate-200 cursor-pointer shadow-sm">
+                        Ver Créditos
                     </button>
                 </div>
             </div>
@@ -180,13 +188,13 @@
             <div class="flex items-end justify-between mb-5 px-1">
                 <div>
                     <h2 id="section-title" class="text-2xl font-black text-slate-900 tracking-tight">Directorio</h2>
-                    <p id="section-subtitle" class="text-xs text-slate-500 font-medium mt-1">Toca cualquier ficha para abrirla</p>
+                    <p id="section-subtitle" class="text-xs text-slate-500 font-medium mt-1">Navega y guarda tus herramientas</p>
                 </div>
                 <span id="counter" class="text-xs font-bold text-adex-blue bg-adex-blue/10 px-3 py-1.5 rounded-full">0</span>
             </div>
 
             <!-- Contenedor de Tarjetas -->
-            <div id="cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-start">
+            <div id="cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 items-start">
                 <!-- Inyectadas por JS -->
             </div>
 
@@ -327,8 +335,8 @@
 
         // LÓGICA DE CRÉDITOS
         function showRealName(btn) {
-            btn.textContent = 'Eric Mozombite';
-            btn.classList.replace('text-slate-800', 'text-adex-blue');
+            btn.innerHTML = '<i class="ph-fill ph-code mr-1"></i> Eric Mozombite';
+            btn.classList.replace('text-slate-500', 'text-adex-blue');
             btn.classList.replace('bg-slate-100', 'bg-blue-50');
             btn.classList.replace('border-slate-200', 'border-blue-200');
         }
@@ -363,6 +371,31 @@
                 icon.classList.remove('ph-x', 'rotate-90');
                 icon.classList.add('ph-list');
                 setTimeout(() => menu.classList.add('hidden'), 300);
+            }
+        }
+
+        // LÓGICA EXPANSIÓN DE TAGS
+        function toggleTags(event, el) {
+            event.stopPropagation(); // Evita que abra el enlace de la tarjeta
+            const container = el.querySelector('.tags-container');
+            const fade = el.querySelector('.tags-fade');
+            const text = el.querySelector('.expand-text');
+            const icon = el.querySelector('.expand-icon');
+            
+            if (container.classList.contains('h-[28px]')) {
+                // Expandir
+                container.classList.remove('h-[28px]', 'overflow-hidden');
+                container.classList.add('h-auto');
+                if(fade) fade.classList.add('hidden');
+                text.textContent = 'Ocultar palabras';
+                icon.classList.replace('ph-caret-down', 'ph-caret-up');
+            } else {
+                // Contraer
+                container.classList.add('h-[28px]', 'overflow-hidden');
+                container.classList.remove('h-auto');
+                if(fade) fade.classList.remove('hidden');
+                text.textContent = 'Ver todas las palabras clave';
+                icon.classList.replace('ph-caret-up', 'ph-caret-down');
             }
         }
 
@@ -402,7 +435,7 @@
                 sub.textContent = "Herramientas que usas frecuentemente";
             } else {
                 title.textContent = AppState.activeCategory === "Todas" ? "Directorio" : AppState.activeCategory;
-                sub.textContent = "Toca cualquier ficha para abrirla";
+                sub.textContent = "Navega y guarda tus herramientas";
             }
         }
 
@@ -414,7 +447,7 @@
             
             updateHeaderTexts();
             renderCategoryPills();
-            if (isFabOpen) toggleFab(); // Cierra el menú al seleccionar
+            if (isFabOpen) toggleFab(); 
             window.scrollTo({ top: 0, behavior: 'smooth' });
             renderGrid();
         }
@@ -497,46 +530,60 @@
                 const isFav = AppState.favorites.includes(tool.id);
                 const starClass = isFav ? "ph-fill ph-star text-[26px] text-yellow-400 drop-shadow-sm" : "ph-bold ph-star text-[26px] text-slate-300";
                 
-                // Lógica Visual para Offline
                 const isOffline = tool.isOffline || false;
                 const cardBaseClass = isOffline ? 'card-offline' : 'bg-white';
                 const offlineBadge = isOffline ? `
-                    <div class="absolute top-4 left-4 bg-red-100 text-red-600 border border-red-200 text-[9px] font-black px-2 py-0.5 rounded-lg uppercase tracking-wider flex items-center gap-1 z-10 shadow-sm">
+                    <div class="absolute top-4 left-4 bg-red-100 text-red-600 border border-red-200 text-[9px] font-black px-2 py-0.5 rounded-lg uppercase tracking-wider flex items-center gap-1 z-10 shadow-sm pointer-events-none">
                         <i class="ph-bold ph-warning-circle"></i> Offline
                     </div>
                 ` : '';
 
-                // Eliminada la restricción de altura para permitir que la tarjeta crezca y muestre todos los tags
+                // El diseño separa el área principal (link web) del área inferior (desplegable de tags)
                 const cardHTML = `
-                    <div class="tool-card ${cardBaseClass} rounded-[1.5rem] p-5 shadow-card border border-slate-100 cursor-pointer flex flex-col h-full relative group animate-enter" 
-                         style="animation-delay: ${i * 0.03}s"
-                         onclick="window.open('${tool.url}', '_blank')">
+                    <div class="tool-card ${cardBaseClass} rounded-[1.5rem] shadow-card border border-slate-100 flex flex-col h-full relative group animate-enter overflow-hidden" 
+                         style="animation-delay: ${i * 0.03}s">
                         
                         ${offlineBadge}
 
                         <!-- Estrella Flotante -->
-                        <button class="absolute top-4 right-4 p-1 z-10" onclick="toggleStar(event, '${tool.id}')">
+                        <button class="absolute top-4 right-4 p-1 z-20" onclick="toggleStar(event, '${tool.id}')">
                             <i class="${starClass}"></i>
                         </button>
 
-                        <!-- Cabecera Tarjeta -->
-                        <div class="flex items-center gap-3 mb-4 ${isOffline ? 'mt-6' : ''}">
-                            <div class="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-adex-blue group-hover:bg-adex-blue group-hover:text-white transition-colors ${isOffline ? 'icon-bg-offline' : ''}">
-                                <i class="ph-duotone ${tool.icon} text-[28px]"></i>
+                        <!-- Área Superior: Lleva a la web -->
+                        <div class="p-5 pb-4 cursor-pointer flex-grow relative z-10" onclick="window.open('${tool.url}', '_blank')">
+                            <!-- Cabecera Tarjeta -->
+                            <div class="flex items-center gap-3 mb-4 ${isOffline ? 'mt-6' : ''}">
+                                <div class="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-adex-blue group-hover:bg-adex-blue group-hover:text-white transition-colors ${isOffline ? 'icon-bg-offline' : ''}">
+                                    <i class="ph-duotone ${tool.icon} text-[28px]"></i>
+                                </div>
+                                <div class="flex-1 pr-8">
+                                    <span class="text-[9px] font-black uppercase tracking-widest text-slate-400 block mb-0.5">${tool.cat}</span>
+                                    <h3 class="text-[17px] font-black text-slate-900 leading-none group-hover:text-adex-blue transition-colors">${tool.name}</h3>
+                                </div>
                             </div>
-                            <div class="flex-1 pr-8">
-                                <span class="text-[9px] font-black uppercase tracking-widest text-slate-400 block mb-0.5">${tool.cat}</span>
-                                <h3 class="text-[17px] font-black text-slate-900 leading-none">${tool.name}</h3>
+                            
+                            <!-- Descripción -->
+                            <p class="text-[13px] text-slate-500 font-medium leading-relaxed">${tool.desc}</p>
+                        </div>
+
+                        <!-- Área Inferior: Despliegue de Tags -->
+                        <div class="tags-section px-5 pb-3 pt-3 border-t border-slate-50 cursor-pointer bg-slate-50/50 hover:bg-slate-100 transition-colors relative z-10" onclick="toggleTags(event, this)">
+                            <div class="relative">
+                                <!-- Contenedor de Tags (Fijado a 1 línea por defecto) -->
+                                <div class="tags-container flex flex-wrap gap-1.5 h-[28px] overflow-hidden transition-all duration-300">
+                                    ${tool.tags.map(t => `<span class="bg-white text-slate-500 text-[10px] font-bold px-2.5 py-1 rounded-md border border-slate-200 whitespace-nowrap ${isOffline ? 'tag-offline' : ''} shadow-sm">${t}</span>`).join('')}
+                                </div>
+                                <!-- Gradiente de ocultamiento -->
+                                <div class="tags-fade absolute bottom-0 right-0 w-12 h-full z-10 pointer-events-none"></div>
+                            </div>
+                            
+                            <div class="flex items-center justify-center gap-1 mt-2.5 text-slate-400 hover:text-adex-blue transition-colors">
+                                <span class="text-[9px] font-black uppercase tracking-widest expand-text">Ver todas las palabras clave</span>
+                                <i class="ph-bold ph-caret-down expand-icon text-xs"></i>
                             </div>
                         </div>
-                        
-                        <!-- Descripción -->
-                        <p class="text-[13px] text-slate-500 font-medium leading-relaxed flex-grow">${tool.desc}</p>
-                        
-                        <!-- Tags visibles en su totalidad (flex-wrap) -->
-                        <div class="mt-4 pt-4 border-t border-slate-50 flex flex-wrap gap-1.5 h-auto">
-                            ${tool.tags.map(t => `<span class="bg-slate-50 text-slate-500 text-[10px] font-bold px-2 py-1 rounded-md border border-slate-100 whitespace-nowrap ${isOffline ? 'tag-offline' : ''}">${t}</span>`).join('')}
-                        </div>
+
                     </div>
                 `;
                 grid.insertAdjacentHTML('beforeend', cardHTML);
